@@ -666,69 +666,9 @@ body.lang-cn li[data-lang="en"]{display:none;}
 body.lang-cn li[data-lang="cn"]{display:flex;}
 body.lang-cn td[data-lang="en"]{display:none;}
 body.lang-cn td[data-lang="cn"]{display:table-cell;}
-
-  /* NDA Gate */
-  .nda-gate{position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999;background:linear-gradient(135deg,#0a1628 0%,#162a4a 50%,#0a1628 100%);display:flex;align-items:center;justify-content:center;font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;}
-  .nda-gate.hidden{display:none;}
-  .nda-box{background:linear-gradient(145deg,#1a2d4a,#0d1a2e);border:2px solid rgba(59,130,246,.4);border-radius:20px;padding:44px 36px;max-width:520px;width:92%;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.6);position:relative;}
-  .nda-box h1{font-size:26px;font-weight:900;color:#60a5fa;margin-bottom:4px;}
-  .nda-box .nda-sub{color:#7b8ca8;font-size:13px;margin-bottom:24px;}
-  .nda-body{text-align:left;color:#c8d6e5;font-size:13px;line-height:1.7;margin-bottom:24px;max-height:260px;overflow-y:auto;padding-right:8px;}
-  .nda-body p{margin-bottom:10px;}
-  .nda-body strong{color:#93c5fd;}
-  .nda-check-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:12px 16px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:10px;}
-  .nda-check-row input[type=checkbox]{width:18px;height:18px;accent-color:#3b82f6;cursor:pointer;}
-  .nda-check-row label{color:#c8d6e5;font-size:13px;cursor:pointer;}
-  .nda-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:.3s;letter-spacing:.5px;}
-  .nda-accept{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;margin-bottom:8px;}
-  .nda-accept:disabled{opacity:.4;cursor:not-allowed;}
-  .nda-accept:not(:disabled):hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(59,130,246,.4);}
-  .nda-decline{background:transparent;border:1px solid rgba(255,59,48,.4);color:#ff6b6b;}
-  .nda-decline:hover{background:rgba(255,59,48,.1);}
-  .nda-lang-sw{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#93c5fd;padding:4px 12px;border-radius:6px;font-size:11px;cursor:pointer;}
-  .nda-lock{font-size:44px;margin-bottom:12px;}
-  .main-content{display:none;}
-  .main-content.unlocked{display:block;}
-
 </style>
 </head>
 <body>
-
-<div class="nda-gate" id="ndaGate">
-  <div class="nda-box">
-    <button class="nda-lang-sw" id="ndaLangBtn" onclick="toggleNdaLang()">中文</button>
-    <div class="nda-lock">📋</div>
-    <h1 id="ndaTitle">Confidentiality Agreement</h1>
-    <p class="nda-sub">Henderson Transpacific LLC · Project Blitzkrieg</p>
-    <div class="nda-body">
-      <div id="ndaEN">
-        <p><strong>This document is strictly confidential.</strong> By clicking Accept, you acknowledge and agree:</p>
-        <p>(1) This document contains <strong>proprietary business intelligence</strong> and strategic information compiled exclusively for Henderson Transpacific LLC.</p>
-        <p>(2) You will <strong>not copy, forward, screenshot, publish, or share</strong> any part of this document without prior written authorization.</p>
-        <p>(3) The information herein is for <strong>evaluation purposes only</strong> — it does not constitute an offer, solicitation, or investment recommendation.</p>
-        <p>(4) This obligation of confidentiality remains in effect for <strong>three (3) years</strong> from the date of access.</p>
-        <p>(5) <strong>All access is logged</strong> including IP address and timestamp.</p>
-      </div>
-      <div id="ndaCN" style="display:none">
-        <p><strong>本文件属严格机密。</strong>点击"同意"即表示您确认并同意：</p>
-        <p>(1) 本文件包含Henderson Transpacific LLC专属的<strong>商业情报</strong>和战略信息。</p>
-        <p>(2) 未经事先书面授权，您<strong>不得复制、转发、截图、发布或分享</strong>本文件的任何内容。</p>
-        <p>(3) 本文信息<strong>仅供评估目的</strong>——不构成要约、招揽或投资建议。</p>
-        <p>(4) 保密义务自访问之日起<strong>三（3）年</strong>内有效。</p>
-        <p>(5) <strong>所有访问均被记录</strong>，包括IP地址和时间戳。</p>
-      </div>
-    </div>
-    <div class="nda-check-row">
-      <input type="checkbox" id="ndaCheck" onchange="document.getElementById('ndaAcceptBtn').disabled=!this.checked">
-      <label for="ndaCheck">I have read and agree to the above terms / 我已阅读并同意以上条款</label>
-    </div>
-    <button class="nda-btn nda-accept" id="ndaAcceptBtn" disabled onclick="acceptNda()">Accept / 同意</button>
-    <button class="nda-btn nda-decline" onclick="declineNda()">Decline / 拒绝</button>
-  </div>
-</div>
-
-<div class="main-content" id="mainContent">
-
 
 <!-- ═══ NDA GATE (shown on load, must be accepted to view deck) ═══ -->
 <div class="nda-gate" id="ndaGate" role="dialog" aria-modal="true" aria-labelledby="ndaGateTitle">
@@ -1866,28 +1806,6 @@ body.lang-cn td[data-lang="cn"]{display:table-cell;}
   }, 100);
 
 })();
-</script>
-
-
-</div><!-- /main-content -->
-
-<script>
-var ndaLang='en';
-function toggleNdaLang(){
-  ndaLang=ndaLang==='en'?'cn':'en';
-  document.getElementById('ndaEN').style.display=ndaLang==='en'?'':'none';
-  document.getElementById('ndaCN').style.display=ndaLang==='cn'?'':'none';
-  document.getElementById('ndaLangBtn').textContent=ndaLang==='en'?'中文':'EN';
-  document.getElementById('ndaTitle').textContent=ndaLang==='en'?'Confidentiality Agreement':'保密协议';
-}
-function acceptNda(){
-  if(!document.getElementById('ndaCheck').checked)return;
-  document.getElementById('ndaGate').classList.add('hidden');
-  document.getElementById('mainContent').classList.add('unlocked');
-}
-function declineNda(){
-  document.documentElement.innerHTML='<head><meta charset="UTF-8"><title>Access Declined</title><style>body{font-family:system-ui;background:#0a1628;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center;}.box{max-width:480px;}h1{color:#60a5fa;margin-bottom:12px;}p{color:#7b8ca8;line-height:1.6;}</style></head><body><div class="box"><h1>Access Declined / 已拒绝访问</h1><p>You have declined the confidentiality terms. Please close this page.<br><br>您已拒绝保密条款。请关闭本页面。</p></div></body>';
-}
 </script>
 
 </body>
