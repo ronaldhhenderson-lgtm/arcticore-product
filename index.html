@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Project Blitzkrieg — Investor Pitch Deck / 投资路演</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  /* Nature / Parchment theme — same as CEO MasterMind */
+  --bg:#f0ebdd;              /* parchment */
+  --bg2:#e6ddbf;             /* aged parchment */
+  --card:#f7f3e6;            /* lighter parchment card */
+  --border:#c9b782;          /* straw */
+  --gold:#a89960;            /* antique gold (primary accent) */
+  --gold2:#8c7e48;           /* deeper straw */
+  --gold-light:#c9b782;      /* straw */
+  --gold-cream:#e8c580;      /* soft gold */
+  --navy:#1f2e22;            /* ink / deep forest */
+  --navy2:#2a3e2e;           /* lighter forest */
+  --bamboo:#3e5c48;          /* bamboo green (secondary accent) */
+  --sage:#8aa893;            /* sage */
+  --straw:#c9b782;           /* straw */
+  --parchment:#f0ebdd;
+  --ink:#1f2e22;
+  --blue:#3e5c48;            /* re-routed: blue → bamboo */
+  --cyan:#8aa893;            /* re-routed: cyan → sage */
+  --green:#6fa876;           /* leaf green */
+  --red:#a8534a;             /* terracotta */
+  --text:#1f2e22;
+  --dim:#556b5a;             /* mossy dim text */
+  --bright:#1f2e22;
+}
+html,body{height:100%;overflow:hidden;}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  background-image:url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+}
+
+/* ═══ TOP BAR ═══ */
+.topbar{
+  position:fixed;top:0;left:0;right:0;
+  background:linear-gradient(135deg,#1f2e22,#2a3e2e 50%,#1f2e22);
+  border-bottom:3px solid var(--gold);
+  padding:10px 24px;
+  display:flex;justify-content:space-between;align-items:center;
+  z-index:100;
+  box-shadow:0 4px 24px rgba(20,20,50,.25);
+  height:56px;
+}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-mark{
+  width:28px;height:28px;border-radius:7px;
+  background:linear-gradient(135deg,var(--gold-light),var(--gold));
+  display:flex;align-items:center;justify-content:center;
+  color:#1f2e22;font-weight:900;font-size:13px;letter-spacing:-0.5px;
+  box-shadow:0 2px 8px rgba(168,153,96,.4);
+}
+.brand h1{
+  font-size:15px;font-weight:800;
+  background:linear-gradient(90deg,#c9b782,#e8c580);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  letter-spacing:-.2px;
+}
+.brand .sub{font-size:10px;color:#a8b0a0;margin-top:1px;}
+
+.controls{display:flex;gap:8px;align-items:center;}
+.ctrl-btn{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(168,153,96,.3);
+  color:#e8e2cf;
+  padding:7px 12px;border-radius:8px;
+  font-size:11px;font-weight:600;cursor:pointer;
+  transition:.15s;
+  font-family:inherit;
+  display:flex;align-items:center;gap:6px;
+}
+.ctrl-btn:hover{background:rgba(168,153,96,.15);border-color:var(--gold);color:#fff;}
+.ctrl-btn.primary{background:var(--gold);border-color:var(--gold);color:#1f2e22;}
+.ctrl-btn.primary:hover{background:var(--gold-light);color:#1f2e22;}
+.ctrl-btn .ic{font-weight:900;font-size:12px;}
+.slide-counter{
+  font-size:11px;color:#b8c0a8;font-weight:600;
+  padding:0 10px;border-left:1px solid rgba(255,255,255,.1);border-right:1px solid rgba(255,255,255,.1);
+  margin:0 4px;
+}
+
+/* ═══ PROGRESS BAR ═══ */
+.progress{position:fixed;top:56px;left:0;right:0;height:3px;background:var(--bg2);z-index:99;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold-light),var(--gold));transition:width .4s cubic-bezier(.4,0,.2,1);}
+
+/* ═══ STAGE ═══ */
+.stage{
+  position:fixed;top:59px;left:0;right:0;bottom:44px;
+  overflow:hidden;
+}
+.slide{
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  padding:30px 48px 18px;
+  opacity:0;transform:translateX(40px);
+  transition:opacity .4s cubic-bezier(.4,0,.2,1),transform .4s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;
+  overflow-y:auto;
+}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:auto;}
+.slide.leave-left{transform:translateX(-40px);opacity:0;}
+.slide.leave-right{transform:translateX(40px);opacity:0;}
+.slide.enter-right{transform:translateX(40px);}
+.slide.enter-left{transform:translateX(-40px);}
+
+.slide-inner{max-width:1280px;margin:0 auto;}
+
+/* ═══ TYPOGRAPHY ═══ */
+.eyebrow{
+  display:inline-block;
+  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--gold);padding:4px 10px;border:1px solid var(--gold);border-radius:4px;
+  margin-bottom:14px;
+}
+.slide h1.title{
+  font-size:52px;font-weight:900;line-height:1.05;letter-spacing:-1.2px;
+  background:linear-gradient(135deg,#1f2e22,#2a3e2e);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:12px;
+}
+.slide h1.hero-title{
+  font-size:64px;font-weight:900;line-height:1.12;letter-spacing:-1.6px;
+  background:linear-gradient(135deg,#c9b782,#a89960 60%,#8c7e48);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:14px;padding:.08em 0;
+}
+body.lang-cn .slide h1.hero-title{line-height:1.25;letter-spacing:0;}
+.slide h2.sub{font-size:22px;font-weight:500;color:var(--dim);margin-bottom:32px;line-height:1.4;}
+.slide h3{font-size:22px;font-weight:800;margin-bottom:10px;color:var(--text);letter-spacing:-.3px;}
+.slide p{font-size:15px;line-height:1.65;color:var(--dim);}
+.slide .lead{font-size:17px;line-height:1.55;color:var(--text);font-weight:500;max-width:880px;}
+
+/* ═══ COVER SLIDE ═══ */
+.cover{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,#1f2e22 0%,#2a3e2e 50%,#1f2e22 100%);
+  display:flex;align-items:safe center;justify-content:center;
+  padding:48px 40px 80px;
+  overflow-y:auto;
+}
+.cover::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 25% 30%,rgba(201,183,130,.14),transparent 50%),
+    radial-gradient(circle at 75% 70%,rgba(168,153,96,.1),transparent 50%);
+  animation:heroPulse 8s ease-in-out infinite;
+}
+@keyframes heroPulse{0%,100%{opacity:.6}50%{opacity:1}}
+.cover-inner{position:relative;z-index:2;text-align:center;max-width:960px;}
+.cover .eyebrow{border-color:var(--gold-light);color:var(--gold-light);}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:38px;}
+.cover-stat{
+  background:rgba(255,255,255,.04);border:1px solid rgba(168,153,96,.25);
+  border-radius:12px;padding:16px;backdrop-filter:blur(10px);
+}
+.cover-stat .v{font-size:26px;font-weight:900;color:#fff;letter-spacing:-.5px;}
+.cover-stat .l{font-size:10px;color:#b8c0a8;margin-top:4px;text-transform:uppercase;letter-spacing:.8px;}
+.cover .confid{
+  position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+  font-size:10px;color:#7a8472;letter-spacing:1.5px;text-transform:uppercase;
+}
+
+/* ═══ GRID LAYOUTS ═══ */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:18px;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px;}
+
+/* ═══ CARDS ═══ */
+.card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:22px;transition:.2s;position:relative;overflow:hidden;
+}
+.card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 12px 30px rgba(168,153,96,.12);}
+.card .bar{position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold);}
+.card .ic-box{
+  width:40px;height:40px;border-radius:10px;
+  background:linear-gradient(135deg,rgba(168,153,96,.15),rgba(201,183,130,.1));
+  display:flex;align-items:center;justify-content:center;
+  color:var(--gold);font-weight:900;font-size:13px;letter-spacing:-.3px;
+  margin-bottom:12px;
+}
+.card h4{font-size:16px;font-weight:700;margin-bottom:8px;color:var(--text);}
+.card p{font-size:13px;line-height:1.55;color:var(--dim);}
+.card .big-num{font-size:36px;font-weight:900;color:var(--text);letter-spacing:-1px;line-height:1;margin:6px 0;}
+.card .big-num.gold{color:var(--gold);}
+.card .sm-note{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.6px;font-weight:600;}
+
+/* KPI mini card */
+.kpi{
+  background:linear-gradient(135deg,#1f2e22,#2a3e2e);
+  border-radius:14px;padding:18px;color:#fff;
+  position:relative;overflow:hidden;
+}
+.kpi::before{
+  content:'';position:absolute;top:0;right:0;width:80px;height:80px;
+  background:radial-gradient(circle,rgba(168,153,96,.2),transparent 70%);
+}
+.kpi .v{font-size:28px;font-weight:900;letter-spacing:-.8px;
+  background:linear-gradient(135deg,#c9b782,#e8c580);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.kpi .l{font-size:10px;color:#b8c0a8;text-transform:uppercase;letter-spacing:.8px;margin-top:4px;}
+.kpi .d{font-size:11px;color:#d8d0b8;margin-top:8px;line-height:1.4;}
+
+/* ═══ PROBLEM SLIDE VISUAL ═══ */
+.problem-viz{
+  display:grid;grid-template-columns:1fr 40px 1fr;align-items:center;gap:18px;
+  margin:24px 0;
+}
+.pv-col{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;}
+.pv-col.bad{border-left:4px solid var(--red);}
+.pv-col.good{border-left:4px solid var(--green);}
+.pv-col h5{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;}
+.pv-col.bad h5{color:var(--red);}
+.pv-col.good h5{color:var(--green);}
+.pv-col .big{font-size:32px;font-weight:900;margin-bottom:6px;}
+.pv-col ul{list-style:none;}
+.pv-col li{padding:5px 0;font-size:13px;color:var(--dim);line-height:1.5;}
+.pv-col li::before{content:'—';color:var(--gold);margin-right:8px;}
+.pv-arrow{text-align:center;font-size:28px;color:var(--gold);font-weight:900;}
+
+/* ═══ TIMELINE ═══ */
+.timeline{position:relative;padding:20px 0 10px;margin:10px 0;}
+.timeline-line{position:absolute;top:52px;left:3%;right:3%;height:2px;background:var(--bg2);z-index:1;}
+.timeline-fill{position:absolute;top:52px;left:3%;height:2px;background:linear-gradient(90deg,var(--gold-light),var(--gold));z-index:2;}
+.timeline-row{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;position:relative;z-index:3;}
+.tl-node{text-align:center;cursor:pointer;transition:.2s;}
+.tl-dot{
+  width:22px;height:22px;border-radius:50%;margin:40px auto 10px;
+  background:var(--bg2);border:3px solid var(--card);
+  transition:.2s;position:relative;
+}
+.tl-node.done .tl-dot{background:var(--green);}
+.tl-node.active .tl-dot{background:var(--gold);box-shadow:0 0 0 6px rgba(168,153,96,.2);}
+.tl-node.planned .tl-dot{background:var(--sage);}
+.tl-phase{font-size:9px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;}
+.tl-label{font-size:11px;font-weight:700;margin-top:4px;color:var(--text);line-height:1.25;}
+.tl-target{font-size:9px;color:var(--dim);margin-top:3px;}
+.tl-node:hover .tl-dot{transform:scale(1.15);}
+
+/* ═══ FINANCIAL TABLE ═══ */
+.fin-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:4px;margin-top:16px;overflow:hidden;}
+.fin-table{width:100%;border-collapse:collapse;}
+.fin-table th{
+  background:#1f2e22;padding:12px 14px;font-size:10px;text-transform:uppercase;
+  letter-spacing:.8px;font-weight:700;text-align:left;color:var(--gold-light);
+}
+.fin-table th:first-child{border-top-left-radius:10px;}
+.fin-table th:last-child{border-top-right-radius:10px;}
+.fin-table td{padding:12px 14px;font-size:13px;border-top:1px solid var(--border);color:var(--text);}
+.fin-table tr:hover td{background:#faf5e6;}
+.fin-table td.strong{font-weight:700;color:var(--gold);}
+
+/* ═══ MOATS GRID ═══ */
+.moat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:18px;}
+.moat{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:18px 14px;text-align:center;transition:.2s;cursor:pointer;
+}
+.moat:hover{transform:translateY(-4px);border-color:var(--gold);box-shadow:0 12px 24px rgba(168,153,96,.1);}
+.moat .mi{
+  width:44px;height:44px;border-radius:50%;margin:0 auto 10px;
+  background:linear-gradient(135deg,#1f2e22,#2a3e2e);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--gold-light);font-weight:900;font-size:12px;
+}
+.moat h5{font-size:13px;font-weight:700;margin-bottom:6px;}
+.moat p{font-size:11px;line-height:1.5;color:var(--dim);}
+
+/* ═══ TWO-COLUMN LIST ═══ */
+.check-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;margin-top:14px;}
+.check-list li{
+  font-size:13px;color:var(--text);padding:8px 12px;
+  background:var(--bg2);border-radius:8px;
+  display:flex;align-items:flex-start;gap:8px;line-height:1.4;
+}
+.check-list li::before{
+  content:'✓';color:var(--gold);font-weight:900;flex-shrink:0;
+  background:rgba(168,153,96,.12);width:20px;height:20px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:11px;
+}
+
+/* ═══ BAR CHART ═══ */
+.bar-chart{margin-top:16px;}
+.bar-row{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.bar-label{font-size:12px;font-weight:700;color:var(--text);min-width:110px;}
+.bar-track{flex:1;height:28px;background:var(--bg2);border-radius:6px;position:relative;overflow:hidden;}
+.bar-fill{
+  height:100%;border-radius:6px;
+  background:linear-gradient(90deg,var(--gold-light),var(--gold));
+  display:flex;align-items:center;justify-content:flex-end;padding-right:10px;
+  color:#fff;font-size:11px;font-weight:700;
+  transition:width .8s cubic-bezier(.4,0,.2,1);
+}
+.bar-fill.ours{background:linear-gradient(90deg,var(--gold-light),var(--gold));}
+.bar-fill.them{background:linear-gradient(90deg,#a0a0b0,#6e6e73);}
+
+/* ═══ ASK SLIDE ═══ */
+.use-funds{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px;}
+.uf{
+  background:linear-gradient(135deg,#1f2e22,#2a3e2e);color:#fff;
+  border-radius:14px;padding:20px;text-align:center;position:relative;overflow:hidden;
+}
+.uf::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold);}
+.uf .pct{
+  font-size:42px;font-weight:900;letter-spacing:-1px;
+  background:linear-gradient(135deg,#c9b782,#e8c580);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;
+}
+.uf .t{font-size:14px;font-weight:700;margin:8px 0 4px;}
+.uf .d{font-size:11px;color:#d8d0b8;line-height:1.4;}
+
+/* ═══ BOTTOM NAV ═══ */
+.bottombar{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--card);border-top:1px solid var(--border);
+  padding:6px 20px;
+  display:flex;justify-content:space-between;align-items:center;
+  z-index:100;height:44px;
+}
+.dots{display:flex;gap:6px;flex:1;justify-content:center;overflow-x:auto;padding:0 12px;}
+.dot{
+  width:8px;height:8px;border-radius:50%;background:var(--bg2);
+  cursor:pointer;transition:.2s;flex-shrink:0;border:none;padding:0;
+}
+.dot:hover{background:#d8d0b8;transform:scale(1.3);}
+.dot.on{background:var(--gold);width:22px;border-radius:4px;}
+
+.nav-btn{
+  background:var(--bg2);border:1px solid var(--border);color:var(--text);
+  padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;
+  cursor:pointer;transition:.15s;font-family:inherit;
+  display:flex;align-items:center;gap:6px;
+}
+.nav-btn:hover{background:var(--gold);color:#fff;border-color:var(--gold);}
+.nav-btn:disabled{opacity:.35;cursor:not-allowed;}
+.nav-btn:disabled:hover{background:var(--bg2);color:var(--text);border-color:var(--border);}
+.nav-btn .arr{font-weight:900;font-size:14px;line-height:1;}
+
+/* ═══ CONFIDENTIAL RIBBON ═══ */
+.confid-ribbon{
+  position:fixed;right:-44px;top:90px;z-index:90;
+  background:var(--gold);color:#fff;padding:5px 48px;
+  font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
+  transform:rotate(45deg);box-shadow:0 2px 8px rgba(0,0,0,.12);
+  pointer-events:none;
+}
+
+/* ═══ HELP OVERLAY ═══ */
+.help-overlay{
+  position:fixed;inset:0;background:rgba(31,46,34,.85);backdrop-filter:blur(6px);
+  display:none;align-items:center;justify-content:center;z-index:200;padding:40px;
+}
+.help-overlay.on{display:flex;}
+.help-box{
+  background:var(--card);border-radius:16px;padding:30px;max-width:480px;width:100%;
+  border:2px solid var(--gold);
+}
+.help-box h3{font-size:20px;margin-bottom:18px;color:var(--text);}
+.help-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.help-row:last-of-type{border-bottom:none;}
+.help-row .k{
+  background:var(--bg2);padding:4px 10px;border-radius:5px;font-family:monospace;
+  font-size:11px;font-weight:700;border:1px solid var(--border);
+}
+.help-close{
+  margin-top:16px;width:100%;padding:10px;background:var(--gold);color:#fff;
+  border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;
+}
+.help-close:hover{background:var(--gold2);}
+
+/* ═══ REDACTED CHIP ═══ */
+.redacted{
+  display:inline-block;background:#2a3e2e;color:var(--gold-light);
+  padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;
+  letter-spacing:.5px;font-family:monospace;
+}
+
+/* ═══ RESPONSIVE ═══ */
+/* Tablet landscape & narrow desktop */
+@media(max-width:1100px){
+  .grid-4,.grid-3,.use-funds{grid-template-columns:repeat(2,1fr);}
+  .moat-grid{grid-template-columns:repeat(2,1fr);}
+  .cover-stats{grid-template-columns:repeat(2,1fr);}
+  .slide h1.hero-title{font-size:48px;}
+  .slide h1.title{font-size:40px;}
+  .timeline-row{grid-template-columns:repeat(4,1fr);gap:14px;}
+  .timeline-line,.timeline-fill{display:none;}
+}
+/* Tablet portrait */
+@media(max-width:900px){
+  .topbar{padding:0 14px;}
+  .controls{gap:6px;}
+  .ctrl-btn{padding:8px 10px;font-size:11px;}
+  .stage{padding:56px 0 44px;}
+  .slide{padding:24px 20px 14px;}
+  .slide h1.hero-title{font-size:42px;}
+  .slide h1.title{font-size:32px;}
+  .grid-4,.grid-3,.use-funds,.moat-grid,.cover-stats{grid-template-columns:repeat(2,1fr);}
+  .timeline-row{grid-template-columns:repeat(2,1fr);gap:12px;}
+  .nda-card{padding:26px;max-width:94vw;}
+}
+/* Small tablets / big phones */
+@media(max-width:700px){
+  .slide{padding:18px 14px 12px;}
+  .grid-2,.problem-viz,.grid-3,.grid-4,.moat-grid,.use-funds,.cover-stats{grid-template-columns:1fr;}
+  .pv-arrow{display:none;}
+  .check-list{grid-template-columns:1fr;}
+  .brand .sub{display:none;}
+  .slide-counter{display:none;}
+  .timeline-row{grid-template-columns:1fr;gap:10px;}
+  .slide h1.hero-title{font-size:34px;line-height:1.15;}
+  .slide h1.title{font-size:26px;}
+  .confid-ribbon{font-size:8px;padding:4px 40px;right:-40px;top:72px;}
+}
+/* Phones */
+@media(max-width:480px){
+  html,body{font-size:14px;}
+  .topbar{padding:0 10px;padding-left:calc(10px + env(safe-area-inset-left));padding-right:calc(10px + env(safe-area-inset-right));}
+  .bottombar{padding:0 8px;padding-left:calc(8px + env(safe-area-inset-left));padding-right:calc(8px + env(safe-area-inset-right));height:52px;}
+  .brand .logo{font-size:13px;}
+  .controls{gap:4px;}
+  .ctrl-btn{padding:10px;font-size:11px;min-height:40px;min-width:40px;justify-content:center;}
+  .ctrl-btn .ic{font-size:14px;}
+  .nav-btn{padding:10px 14px;font-size:12px;min-height:40px;min-width:64px;justify-content:center;}
+  .dots{gap:4px;padding:0 6px;}
+  .dot{width:6px;height:6px;}
+  .dot.on{width:18px;}
+  .stage{padding:52px 0 52px;}
+  .slide{padding:16px 12px 10px;}
+  .slide h1.hero-title{font-size:28px;letter-spacing:-.5px;}
+  .slide h1.title{font-size:22px;}
+  .slide h2{font-size:18px;}
+  .slide h3{font-size:15px;}
+  .slide p,.slide li{font-size:13px;line-height:1.5;}
+  table{font-size:11px;}
+  table th,table td{padding:6px 5px;}
+  .cover-stats .stat .num,.cover-stats .stat-val{font-size:22px;}
+  .nda-gate{padding:16px;padding-top:calc(16px + env(safe-area-inset-top));padding-bottom:calc(16px + env(safe-area-inset-bottom));}
+  .nda-card{padding:20px 18px;max-width:96vw;max-height:calc(100vh - 32px);overflow-y:auto;}
+  .nda-card h2{font-size:18px;}
+  .nda-body{max-height:none;font-size:12px;}
+  .nda-actions{flex-direction:column;gap:10px;}
+  .nda-actions button{width:100%;min-height:44px;}
+  .help-overlay .help-card{max-width:94vw;padding:20px;}
+  .help-overlay kbd{font-size:11px;padding:2px 6px;}
+}
+/* Tiny phones */
+@media(max-width:380px){
+  .slide h1.hero-title{font-size:24px;}
+  .slide h1.title{font-size:19px;}
+  .ctrl-btn{padding:8px;}
+  .confid-ribbon{display:none;}
+}
+/* Short landscape (phone rotated) */
+@media(max-height:500px) and (orientation:landscape){
+  .topbar{height:40px;}
+  .bottombar{height:40px;}
+  .stage{padding:40px 0 40px;}
+  .slide h1.hero-title{font-size:28px;}
+  .slide h1.title{font-size:22px;}
+  .nda-card{max-height:calc(100vh - 40px);overflow-y:auto;}
+  .nda-body{max-height:38vh;}
+}
+/* Touch devices */
+@media (hover:none){
+  .ctrl-btn:hover,.nav-btn:hover,.dot:hover{transform:none;}
+  button{touch-action:manipulation;}
+}
+
+/* ═══ NDA GATE ═══ */
+.nda-gate{
+  position:fixed;inset:0;
+  background:linear-gradient(135deg,#1a2819 0%,#1f2e22 50%,#2a3e2e 100%);
+  display:flex;align-items:center;justify-content:center;z-index:500;padding:30px;
+  overflow-y:auto;
+}
+.nda-gate.hidden{display:none;}
+.nda-box{
+  background:var(--card);border-radius:16px;padding:36px 40px;max-width:640px;width:100%;
+  border:2px solid var(--gold);
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  position:relative;
+}
+.nda-box::before{
+  content:'CONFIDENTIAL';position:absolute;top:-12px;right:24px;
+  background:var(--gold);color:#1f2e22;padding:4px 14px;border-radius:4px;
+  font-size:10px;font-weight:900;letter-spacing:2px;
+}
+.nda-box h2{
+  font-size:26px;font-weight:900;letter-spacing:-.5px;
+  background:linear-gradient(135deg,#1f2e22,#2a3e2e);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:8px;
+}
+.nda-box .sub{font-size:13px;color:var(--dim);margin-bottom:18px;font-weight:500;}
+.nda-body{
+  background:var(--bg);border:1px solid var(--border);border-radius:10px;
+  padding:16px 18px;font-size:13px;line-height:1.65;color:var(--text);
+  max-height:230px;overflow-y:auto;margin-bottom:16px;
+}
+.nda-body p{font-size:13px;color:var(--text);margin-bottom:10px;}
+.nda-body strong{color:var(--gold);}
+.nda-agree{
+  display:flex;align-items:flex-start;gap:10px;padding:12px 14px;
+  background:#faf5e6;border:1px solid rgba(168,153,96,.3);border-radius:8px;
+  margin-bottom:16px;cursor:pointer;user-select:none;
+}
+.nda-agree input[type="checkbox"]{
+  width:18px;height:18px;accent-color:var(--gold);flex-shrink:0;margin-top:2px;cursor:pointer;
+}
+.nda-agree label{font-size:13px;color:var(--text);cursor:pointer;line-height:1.5;}
+.nda-buttons{display:flex;gap:10px;}
+.nda-accept{
+  flex:1;padding:12px;background:var(--gold);color:#fff;border:none;border-radius:10px;
+  font-weight:800;cursor:pointer;font-size:14px;font-family:inherit;
+  transition:.15s;letter-spacing:.3px;
+}
+.nda-accept:hover:not(:disabled){background:var(--gold2);transform:translateY(-1px);box-shadow:0 6px 16px rgba(168,153,96,.3);}
+.nda-accept:disabled{background:#d8d0b8;cursor:not-allowed;}
+.nda-decline{
+  padding:12px 18px;background:transparent;color:var(--dim);border:1px solid var(--border);
+  border-radius:10px;font-weight:600;cursor:pointer;font-size:13px;font-family:inherit;
+  transition:.15s;
+}
+.nda-decline:hover{background:var(--bg2);color:var(--text);}
+.nda-lang-sw{
+  position:absolute;top:14px;left:14px;font-size:11px;color:var(--dim);
+  background:var(--bg2);border:1px solid var(--border);border-radius:6px;
+  padding:4px 10px;cursor:pointer;font-family:inherit;font-weight:600;
+}
+.nda-lang-sw:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ═══ PRINTABLE NDA SLIDE ═══ */
+.nda-print{
+  background:#ffffff;border:2px solid var(--navy);border-radius:10px;
+  padding:36px 40px;max-width:860px;margin:0 auto;
+  font-family:'Inter',serif;color:#1d1d1f;
+  box-shadow:0 4px 24px rgba(0,0,0,.08);
+}
+.nda-print h2{
+  text-align:center;font-size:22px;font-weight:900;
+  letter-spacing:2px;margin-bottom:6px;color:var(--navy);
+  border-bottom:2px solid var(--gold);padding-bottom:12px;
+  text-transform:uppercase;
+}
+.nda-print .stamp{
+  text-align:center;font-size:10px;color:var(--dim);
+  letter-spacing:1.5px;margin-bottom:22px;
+}
+.nda-print .clause{font-size:12px;line-height:1.7;margin-bottom:12px;color:#333;}
+.nda-print .clause strong{color:var(--navy);}
+.nda-print .clause .cnum{
+  display:inline-block;font-weight:800;color:var(--gold);margin-right:6px;min-width:22px;
+}
+.nda-sig-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:28px;padding-top:22px;
+  border-top:1px dashed var(--border);
+}
+.nda-sig-block h4{
+  font-size:11px;color:var(--navy);font-weight:800;
+  text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px;
+}
+.nda-sig-line{
+  display:flex;align-items:baseline;gap:8px;
+  margin-bottom:14px;font-size:11px;color:#444;
+}
+.nda-sig-line .label{min-width:80px;font-weight:600;}
+.nda-sig-line .underline{
+  flex:1;border-bottom:1px solid #333;height:22px;
+}
+.print-btn-inline{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--gold);color:#fff;border:none;border-radius:8px;
+  padding:10px 20px;font-family:inherit;font-weight:700;font-size:13px;
+  cursor:pointer;margin-top:18px;transition:.15s;
+}
+.print-btn-inline:hover{background:var(--gold2);}
+
+@media print{
+  /* A4 page setup */
+  @page{size:A4 portrait;margin:10mm;}
+
+  /* Hide ALL chrome + ALL slides by default — ONLY the NDA prints */
+  .topbar,.bottombar,.progress,.confid-ribbon,.help-overlay,.nda-gate,.print-btn-inline,.dots,.nav-btn{display:none !important;}
+  .stage{position:static !important;inset:auto !important;overflow:visible !important;}
+  body,html{height:auto !important;overflow:visible !important;background:#fff !important;color:#000 !important;}
+
+  /* Hide every slide, unconditionally */
+  .slide{display:none !important;}
+
+  /* Show ONLY the last slide (the printable NDA) */
+  .slide:last-of-type{
+    display:block !important;position:static !important;opacity:1 !important;transform:none !important;
+    page-break-after:auto !important;pointer-events:auto !important;padding:0 !important;background:#fff !important;
+  }
+  /* Hide the intro header of the NDA slide — only the .nda-print doc should print */
+  .slide:last-of-type .eyebrow,
+  .slide:last-of-type .title,
+  .slide:last-of-type .lead,
+  .slide:last-of-type .print-btn-inline{display:none !important;}
+
+  /* Fit NDA document onto a single A4 page */
+  .slide:last-of-type .slide-inner{padding:0 !important;max-width:none !important;width:100% !important;}
+  .nda-print{
+    padding:8mm 6mm !important;background:#fff !important;color:#000 !important;border:none !important;
+    font-size:9.2pt !important;line-height:1.32 !important;max-width:none !important;
+  }
+  .nda-print h2{font-size:13pt !important;margin-bottom:4mm !important;color:#000 !important;}
+  .nda-print .stamp{font-size:7.5pt !important;margin-bottom:4mm !important;color:#000 !important;border-color:#000 !important;}
+  .nda-print .clause{font-size:8.6pt !important;line-height:1.32 !important;margin-bottom:2.2mm !important;color:#000 !important;}
+  .nda-print .clause .cnum{color:#000 !important;}
+  .nda-print .clause strong{color:#000 !important;}
+  .nda-sig-grid{margin-top:4mm !important;gap:4mm !important;}
+  .nda-sig-block{padding:3mm !important;background:#fff !important;border:1px solid #000 !important;}
+  .nda-sig-block h4{font-size:9pt !important;margin-bottom:2mm !important;color:#000 !important;}
+  .nda-sig-line{font-size:8pt !important;margin-bottom:2mm !important;color:#000 !important;}
+  .nda-sig-line .underline{border-bottom:1px solid #000 !important;}
+
+  /* In CN mode, nudge slightly smaller so dense glyphs still fit one A4 */
+  body.lang-cn .nda-print{font-size:8.8pt !important;line-height:1.3 !important;}
+  body.lang-cn .nda-print .clause{font-size:8.3pt !important;}
+
+  /* Legacy class kept as a no-op alias — default now behaves as NDA-only */
+  body.print-nda-only .slide{display:none !important;}
+  body.print-nda-only .slide:last-of-type{display:block !important;}
+}
+
+/* ═══ SCREENSHOT / COPY DETERRENTS (cannot fully block, but raise the bar) ═══ */
+.stage,.slide{
+  -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;
+  -webkit-touch-callout:none;
+}
+/* Allow text selection inside the NDA form area only */
+.nda-print,.nda-print *,.nda-gate,.nda-gate *{
+  -webkit-user-select:text;user-select:text;-webkit-touch-callout:default;
+}
+/* Diagonal watermark overlays every slide — visible to on-screen viewer, survives screenshots */
+.slide::after{
+  content:'CONFIDENTIAL · PROJECT BLITZKRIEG · DO NOT DISTRIBUTE';
+  position:absolute;inset:0;pointer-events:none;
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;font-weight:900;letter-spacing:3px;
+  color:rgba(62,92,72,0.07);
+  transform:rotate(-28deg);
+  text-align:center;white-space:nowrap;
+  z-index:1;
+  mix-blend-mode:multiply;
+}
+.slide:last-of-type::after{display:none;}
+
+/* CN / EN language toggle — hide inactive */
+[data-lang="cn"]{display:none;}
+body.lang-cn [data-lang="en"]{display:none;}
+body.lang-cn [data-lang="cn"]{display:inline-block;}
+body.lang-cn .block[data-lang="en"]{display:none;}
+body.lang-cn .block[data-lang="cn"]{display:block;}
+body.lang-cn li[data-lang="en"]{display:none;}
+body.lang-cn li[data-lang="cn"]{display:flex;}
+body.lang-cn td[data-lang="en"]{display:none;}
+body.lang-cn td[data-lang="cn"]{display:table-cell;}
+</style>
+</head>
+<body>
+
+<!-- ═══ NDA GATE (shown on load, must be accepted to view deck) ═══ -->
+<div class="nda-gate" id="ndaGate" role="dialog" aria-modal="true" aria-labelledby="ndaGateTitle">
+  <div class="nda-box">
+    <button class="nda-lang-sw" id="ndaLangBtn" type="button" title="Toggle language / 切换语言">
+      <span data-lang="en">中文</span>
+      <span data-lang="cn">EN</span>
+    </button>
+    <h2 id="ndaGateTitle">
+      <span data-lang="en">Confidentiality Notice</span>
+      <span data-lang="cn">保密声明</span>
+    </h2>
+    <div class="sub">
+      <span data-lang="en">Project Blitzkrieg · Investor Pitch Deck · For Your Eyes Only</span>
+      <span data-lang="cn">闪电战项目 · 投资路演 · 仅限您本人查阅</span>
+    </div>
+    <div class="nda-body">
+      <div data-lang="en" class="block">
+        <p><strong>This deck is strictly confidential.</strong> By clicking <strong>Accept</strong>, you agree:</p>
+        <p>(1) <strong>For your eyes only</strong> — solely to evaluate a potential investment.</p>
+        <p>(2) <strong>Do not copy, forward, screenshot, publish, or share</strong> any part without written consent.</p>
+        <p>(3) Protect this info as you would your own top-secret material.</p>
+        <p>(4) Contains estimates and ranges — <strong>not an offer to sell securities</strong>, and not a substitute for formal diligence in the Investor Data Room.</p>
+        <p>(5) Confidentiality lasts <strong>three (3) years</strong> from receipt, or until it becomes public through no fault of yours.</p>
+        <p>If you don't agree, click Decline and delete the file.</p>
+      </div>
+      <div data-lang="cn" class="block">
+        <p><strong>本演示文稿属严格机密。</strong>点击"同意"即表示您确认：</p>
+        <p>(1) <strong>仅限您本人查阅</strong>——仅用于评估潜在投资。</p>
+        <p>(2) 未经书面同意，<strong>不得复制、转发、截屏、发布或分享</strong>任何内容。</p>
+        <p>(3) 以保护自身最高机密资料的标准保护本信息。</p>
+        <p>(4) 包含估算与区间值——<strong>不构成证券销售要约</strong>，亦不替代在投资者资料室进行的正式尽职调查。</p>
+        <p>(5) 保密义务自收到之日起<strong>存续三 (3) 年</strong>，或至信息非因您过错而公开，以较早者为准。</p>
+        <p>若不同意，请点击"拒绝"并删除本文件。</p>
+      </div>
+    </div>
+    <label class="nda-agree" for="ndaCheck">
+      <input type="checkbox" id="ndaCheck">
+      <span>
+        <span data-lang="en">I have read and agree to the above. I will treat this deck as confidential — for my eyes only.</span>
+        <span data-lang="cn">本人已阅读并同意上述条款，承诺将本文件视为机密材料——仅限本人查阅。</span>
+      </span>
+    </label>
+    <div class="nda-buttons">
+      <button class="nda-decline" id="ndaDecline" type="button">
+        <span data-lang="en">Decline</span>
+        <span data-lang="cn">拒绝</span>
+      </button>
+      <button class="nda-accept" id="ndaAccept" type="button" disabled>
+        <span data-lang="en">Accept &amp; View Deck</span>
+        <span data-lang="cn">同意并查看</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOP BAR ═══ -->
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-mark">PB</div>
+    <div>
+      <h1>
+        <span data-lang="en">Project Blitzkrieg</span>
+        <span data-lang="cn">闪电战项目</span>
+      </h1>
+      <div class="sub">
+        <span data-lang="en">Investor Pitch Deck · Confidential</span>
+        <span data-lang="cn">投资路演 · 机密文件</span>
+      </div>
+    </div>
+  </div>
+  <div class="controls">
+    <span class="slide-counter"><span id="curSlide">1</span> / <span id="totSlide">14</span></span>
+    <button class="ctrl-btn" id="homeBtn" type="button" title="Back to cover / 回到封面">
+      <span class="ic">⌂</span>
+      <span data-lang="en">Home</span>
+      <span data-lang="cn">首页</span>
+    </button>
+    <button class="ctrl-btn" id="langBtn" type="button" title="Toggle language / 切换语言">
+      <span class="ic">◐</span>
+      <span data-lang="en">中文</span>
+      <span data-lang="cn">EN</span>
+    </button>
+    <button class="ctrl-btn" id="helpBtn" type="button" title="Keyboard shortcuts">
+      <span class="ic">?</span>
+    </button>
+    <button class="ctrl-btn" id="fsBtn" type="button" title="Fullscreen">
+      <span class="ic">⛶</span>
+      <span data-lang="en">Fullscreen</span>
+      <span data-lang="cn">全屏</span>
+    </button>
+    <button class="ctrl-btn primary" id="printBtn" type="button" title="Print NDA only (A4) · 仅打印保密协议（A4）">
+      <span class="ic">⎙</span>
+      <span data-lang="en">Print NDA (A4)</span>
+      <span data-lang="cn">打印NDA (A4)</span>
+    </button>
+  </div>
+</div>
+
+<div class="progress"><div class="progress-fill" id="progFill" style="width:7.7%"></div></div>
+
+<div class="confid-ribbon">Confidential</div>
+
+<!-- ═══ STAGE ═══ -->
+<div class="stage" id="stage">
+
+  <!-- ═══ 1. COVER ═══ -->
+  <section class="slide active" data-title-en="Cover" data-title-cn="封面">
+    <div class="cover">
+      <div class="cover-inner">
+        <div class="eyebrow">
+          <span data-lang="en">Confidential · For Qualified Investors</span>
+          <span data-lang="cn">机密 · 仅限合格投资者</span>
+        </div>
+        <h1 class="hero-title">
+          <span data-lang="en">Powering the AI Era</span>
+          <span data-lang="cn">为AI时代供能</span>
+        </h1>
+        <h2 class="sub" style="color:#d8d0b8;">
+          <span data-lang="en">Utility-scale solar + battery storage, built in 111 days — not 2 years.</span>
+          <span data-lang="cn">公用事业级光伏+储能，111天建成——而非2年。</span>
+        </h2>
+        <div class="cover-stats">
+          <div class="cover-stat"><div class="v">$300B</div><div class="l"><span data-lang="en">Mid-term Target</span><span data-lang="cn">中期目标</span></div></div>
+          <div class="cover-stat"><div class="v">111 d</div><div class="l"><span data-lang="en">Site Deploy</span><span data-lang="cn">单站工期</span></div></div>
+          <div class="cover-stat"><div class="v">10.2 GW</div><div class="l"><span data-lang="en">Pipeline</span><span data-lang="cn">项目管线</span></div></div>
+          <div class="cover-stat"><div class="v">34.4%</div><div class="l"><span data-lang="en">Net Margin</span><span data-lang="cn">净利率</span></div></div>
+        </div>
+      </div>
+      <div class="confid">
+        <span data-lang="en">Q2 2026 · Do Not Distribute</span>
+        <span data-lang="cn">2026第二季度 · 请勿传阅</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 2. THE PROBLEM ═══ -->
+  <section class="slide" data-title-en="Problem" data-title-cn="问题">
+    <div class="slide-inner">
+      <div class="eyebrow"><span data-lang="en">01 · The Problem</span><span data-lang="cn">01 · 问题</span></div>
+      <h1 class="title">
+        <span data-lang="en">AI compute is outrunning the grid.</span>
+        <span data-lang="cn">AI算力正在跑赢电网。</span>
+      </h1>
+      <p class="lead" style="margin-bottom:14px;">
+        <span data-lang="en">Hyperscalers are committing to multi-GW data centers that utility grids simply cannot serve in time. The bottleneck is no longer silicon — it is power delivery.</span>
+        <span data-lang="cn">超大规模云厂商正签下数GW级数据中心合同，而电网根本无法按时供电。瓶颈不再是芯片——而是电力交付。</span>
+      </p>
+
+      <div class="problem-viz">
+        <div class="pv-col bad">
+          <h5><span data-lang="en">Today's Grid Reality</span><span data-lang="cn">当前电网现状</span></h5>
+          <div class="big" style="color:var(--red);">4+ <span style="font-size:14px;color:var(--dim);font-weight:600;"><span data-lang="en">years</span><span data-lang="cn">年</span></span></div>
+          <ul>
+            <li><span data-lang="en">Average utility interconnection queue</span><span data-lang="cn">平均电网接入排队周期</span></li>
+            <li><span data-lang="en">18–24 months to break ground on conventional sites</span><span data-lang="cn">传统场站需18–24个月开工</span></li>
+            <li><span data-lang="en">Stalled AI buildouts, deferred revenue</span><span data-lang="cn">AI建设停滞，营收被迫递延</span></li>
+          </ul>
+        </div>
+        <div class="pv-arrow">→</div>
+        <div class="pv-col good">
+          <h5><span data-lang="en">What the Market Needs</span><span data-lang="cn">市场真正需要什么</span></h5>
+          <div class="big" style="color:var(--green);">111 <span style="font-size:14px;color:var(--dim);font-weight:600;"><span data-lang="en">days</span><span data-lang="cn">天</span></span></div>
+          <ul>
+            <li><span data-lang="en">Off-grid, behind-the-meter power in months</span><span data-lang="cn">数月内交付离网/表后电力</span></li>
+            <li><span data-lang="en">Solar + storage dedicated to the load</span><span data-lang="cn">专为负载配套的光储一体方案</span></li>
+            <li><span data-lang="en">Long-dated PPAs with investment-grade offtakers</span><span data-lang="cn">与投资级买方签订长期PPA</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top:18px;">
+        <div class="kpi"><div class="v">~15 GW</div><div class="l"><span data-lang="en">Unmet Demand</span><span data-lang="cn">未满足需求</span></div><div class="d"><span data-lang="en">AI load waiting for power</span><span data-lang="cn">等待供电的AI负载</span></div></div>
+        <div class="kpi"><div class="v">$0.15–0.18</div><div class="l"><span data-lang="en">Target $/kWh</span><span data-lang="cn">目标电价</span></div><div class="d"><span data-lang="en">Accretive to offtaker P&amp;L</span><span data-lang="cn">对买方损益表增厚</span></div></div>
+        <div class="kpi"><div class="v">600+</div><div class="l"><span data-lang="en">Addressable Sites</span><span data-lang="cn">可覆盖场站数</span></div><div class="d"><span data-lang="en">Fiber-adjacent US parcels</span><span data-lang="cn">美国近光纤地块</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 3. MARKET OPPORTUNITY ═══ -->
+  <section class="slide" data-title-en="Market" data-title-cn="市场">
+    <div class="slide-inner">
+      <div class="eyebrow"><span data-lang="en">02 · Market Opportunity</span><span data-lang="cn">02 · 市场机会</span></div>
+      <h1 class="title">
+        <span data-lang="en">A structural, decade-long build cycle.</span>
+        <span data-lang="cn">一个结构性的十年基建周期。</span>
+      </h1>
+      <p class="lead" style="margin-bottom:12px;">
+        <span data-lang="en">Behind-the-meter power for AI is a new asset class. We are positioning early, in the window before grid infrastructure catches up.</span>
+        <span data-lang="cn">AI专用表后电力正成为全新的资产类别。我们在电网追赶到位之前，抢占先机。</span>
+      </p>
+
+      <div class="grid-4">
+        <div class="card"><span class="bar"></span>
+          <div class="ic-box">TAM</div>
+          <h4><span data-lang="en">Total Addressable</span><span data-lang="cn">总体可达</span></h4>
+          <div class="big-num gold">$1T+</div>
+          <p class="sm-note"><span data-lang="en">AI power infra / decade</span><span data-lang="cn">AI电力基建 / 十年</span></p>
+        </div>
+        <div class="card"><span class="bar"></span>
+          <div class="ic-box">SAM</div>
+          <h4><span data-lang="en">Serviceable</span><span data-lang="cn">可服务</span></h4>
+          <div class="big-num gold">$180B+</div>
+          <p class="sm-note"><span data-lang="en">US fiber-adjacent solar+BESS</span><span data-lang="cn">美国近光纤光储</span></p>
+        </div>
+        <div class="card"><span class="bar"></span>
+          <div class="ic-box">SOM</div>
+          <h4><span data-lang="en">Our 5-Yr Target</span><span data-lang="cn">5年目标</span></h4>
+          <div class="big-num gold">$47B/yr</div>
+          <p class="sm-note"><span data-lang="en">Run-rate revenue potential</span><span data-lang="cn">潜在年化营收</span></p>
+        </div>
+        <div class="card"><span class="bar"></span>
+          <div class="ic-box">PPA</div>
+          <h4><span data-lang="en">Contract Length</span><span data-lang="cn">合同周期</span></h4>
+          <div class="big-num gold">20–25 y</div>
+          <p class="sm-note"><span data-lang="en">Infrastructure-grade duration</span><span data-lang="cn">基建级合同长度</span></p>
+        </div>
+      </div>
+
+      <h3 style="margin-top:28px;"><span data-lang="en">Who is buying</span><span data-lang="cn">谁在采购</span></h3>
+      <ul class="check-list">
+        <li><span data-lang="en"><strong>Top-tier global cloud providers</strong> — multi-GW commitments, identities under NDA</span><span data-lang="cn"><strong>顶级全球云厂商</strong> — 数GW合同，客户身份受保密协议约束</span></li>
+        <li><span data-lang="en"><strong>Frontier AI labs</strong> — securing dedicated compute power</span><span data-lang="cn"><strong>前沿AI实验室</strong> — 锁定专属算力供电</span></li>
+        <li><span data-lang="en"><strong>Sovereign / industrial offtakers</strong> — strategic power security</span><span data-lang="cn"><strong>主权/工业买方</strong> — 战略电力安全</span></li>
+        <li><span data-lang="en"><strong>Infrastructure funds</strong> — co-invest on asset-level PPAs</span><span data-lang="cn"><strong>基础设施基金</strong> — 按资产级PPA联合投资</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══ 4. SOLUTION ═══ -->
+  <section class="slide" data-title-en="Solution" data-title-cn="解决方案">
+    <div class="slide-inner">
+      <div class="eyebrow"><span data-lang="en">03 · Our Solution</span><span data-lang="cn">03 · 我们的方案</span></div>
+      <h1 class="title">
+        <span data-lang="en">A replicable &ldquo;Strike Team&rdquo; playbook.</span>
+        <span data-lang="cn">一套可复制的"突击队"打法。</span>
+      </h1>
+      <p class="lead" style="margin-bottom:10px;">
+        <span data-lang="en">Each Strike Team delivers one fully-commissioned solar+BESS site in 111 days — land to live — under a standardized template. Proprietary methods covered under <span class="redacted">[IP Portfolio]</span>.</span>
+        <span data-lang="cn">每支突击队在111天内按标准化模板交付一个完整调试的光储场站——从拿地到并网。专有方法受<span class="redacted">[专利组合]</span>保护。</span>
+      </p>
+
+      <div class="grid-3">
+        <div class="card"><span class="bar"></span>
+          <div class="ic-box">01</div>
+          <h4><span data-lang="en">Pre-Secured Land</span><span data-lang="cn">预锁土地</span></h4>
+          <p><span data-lang="en">Dark-fiber-adjacent parcels optioned ahead of demand. Site-selection model identifies top locations before competitors know they exist.</span><span data-lang="cn">近光纤地块提前期权锁定。选址模型在对手察觉前锁定最优点位。</span></p>
+        </div>
+        <div class="card"><span class="bar"></span>
+          <div class="ic-box">02</div>
+          <h4><span data-lang="en">Robotic Deployment</span><span data-lang="cn">机器人部署</span></h4>
+          <p><span data-lang="en">Automated install crews compress a 2-year buildout into ~45 construction days on site. Technical details under <span class="redacted">[Trade Secret]</span>.</span><span data-lang="cn">自动化施工队将2年工期压缩至约45个施工日。技术细节属<span class="redacted">[商业秘密]</span>。</span></p>
+        </div>
+        <div class="card"><span class="bar"></span>
+          <div class="ic-box">03</div>
+          <h4><span data-lang="en">Vertical Supply</span><span data-lang="cn">垂直供应</span></h4>
+          <p><span data-lang="en">Locked-in upstream manufacturing via M&amp;A-secured partners. Panels, BESS racks, and balance-of-plant flow on our schedule.</span><span data-lang="cn">通过并购绑定上游制造。面板、储能柜、辅助系统按我方节奏交付。</span></p>
+        </div>
+        <div class="card"><span class="bar"></span>
+          <div class="ic-box">04</div>
+          <h4><span data-lang="en">PPA Engine</span><span data-lang="cn">PPA引擎</span></h4>
+          <p><span data-lang="en">Standardized contract templates with investment-grade offtakers — 20–25 year durations, inflation-indexed, take-or-pay.</span><span data-lang="cn">与投资级买方的标准化合同——20–25年期，通胀挂钩，照付不议。</span></p>
+        </div>
+        <div class="card"><span class="bar"></span>
+          <div class="ic-box">05</div>
+          <h4><span data-lang="en">N+3 Redundancy</span><span data-lang="cn">N+3冗余</span></h4>
+          <p><span data-lang="en">99.999% uptime design. Redundant solar + BESS + inverter paths ensure hyperscaler-grade SLA without grid dependency.</span><span data-lang="cn">99.999%可用性设计。光伏+储能+逆变器多路冗余，不依赖电网即可达到云厂商SLA。</span></p>
+        </div>
+        <div class="card"><span class="bar"></span>
+          <div class="ic-box">06</div>
+          <h4><span data-lang="en">Capital Stack</span><span data-lang="cn">资本结构</span></h4>
+          <p><span data-lang="en">Project finance + equity + TSXV/Nasdaq listing path. Each site is financeable on its own PPA.</span><span data-lang="cn">项目融资+股权+TSXV/纳斯达克上市通道。每个场站凭PPA即可融资。</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 5. WHY NOW ═══ -->
+  <section class="slide" data-title-en="Why Now" data-title-cn="为什么是现在">
+    <div class="slide-inner">
+      <div class="eyebrow"><span data-lang="en">04 · Why Now</span><span data-lang="cn">04 · 为什么是现在</span></div>
+      <h1 class="title">
+        <span data-lang="en">Four tailwinds converge at the same moment.</span>
+        <span data-lang="cn">四大顺风同时到位。</span>
+      </h1>
+
+      <div class="grid-2" style="margin-top:22px;">
+        <div class="card"><span class="bar"></span>
+          <h3 style="color:var(--gold);">⚡ <span data-lang="en">AI Power Crisis</span><span data-lang="cn">AI电力危机</span></h3>
+          <p><span data-lang="en">Hyperscaler capex has 10x'd. Utility grids take 4+ years to interconnect. The gap is now, and it is massive.</span><span data-lang="cn">超大规模云厂商资本开支10倍增长，而电网接入要排4年以上。缺口已经出现，而且巨大。</span></p>
+        </div>
+        <div class="card"><span class="bar"></span>
+          <h3 style="color:var(--gold);">☀ <span data-lang="en">Solar + BESS Cost Floor</span><span data-lang="cn">光储成本触底</span></h3>
+          <p><span data-lang="en">Panel and lithium prices are at structural lows. Unit economics now beat gas peakers in most US geographies.</span><span data-lang="cn">组件与锂电价格处结构性低点，单位经济性已优于大多数美国地区的调峰燃气机组。</span></p>
+        </div>
+        <div class="card"><span class="bar"></span>
+          <h3 style="color:var(--gold);">⏱ <span data-lang="en">Speed Is the New Moat</span><span data-lang="cn">速度即护城河</span></h3>
+          <p><span data-lang="en">In a land grab, the company that energizes first keeps the offtaker. Our 111-day cycle is a permanent asymmetry.</span><span data-lang="cn">在圈地战中，先并网者锁定买方。111天周期构成永久性非对称优势。</span></p>
+        </div>
+        <div class="card"><span class="bar"></span>
+          <h3 style="color:var(--gold);">🌐 <span data-lang="en">Policy + Capital Aligned</span><span data-lang="cn">政策与资本共振</span></h3>
+          <p><span data-lang="en">IRA incentives, sovereign tech-sovereignty pushes, and infrastructure capital are all pointing the same direction.</span><span data-lang="cn">IRA激励、主权科技自主化诉求、基建资本三力同向。</span></p>
+        </div>
+      </div>
+
+      <div class="fin-wrap" style="margin-top:22px;">
+        <table class="fin-table">
+          <thead>
+            <tr>
+              <th><span data-lang="en">Window</span><span data-lang="cn">时间窗口</span></th>
+              <th><span data-lang="en">What Opens</span><span data-lang="cn">窗口内容</span></th>
+              <th><span data-lang="en">What Closes If We Wait</span><span data-lang="cn">若等待则错失</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong><span data-lang="en">2026 – 2027</span><span data-lang="cn">2026–2027</span></strong></td>
+              <td><span data-lang="en">First-mover site options, anchor hyperscaler contracts</span><span data-lang="cn">首动方土地期权、锚定云厂商合同</span></td>
+              <td><span data-lang="en">Best fiber-adjacent parcels get optioned by competitors</span><span data-lang="cn">最优近光纤地块被对手锁定</span></td>
+            </tr>
+            <tr>
+              <td><strong><span data-lang="en">2027 – 2029</span><span data-lang="cn">2027–2029</span></strong></td>
+              <td><span data-lang="en">Scale to 10 Strike Teams, Nasdaq listing window</span><span data-lang="cn">扩至10支突击队、纳斯达克上市窗口</span></td>
+              <td><span data-lang="en">Multiples compress as category matures</span><span data-lang="cn">板块成熟后估值倍数收缩</span></td>
+            </tr>
+            <tr>
+              <td><strong><span data-lang="en">2029 +</span><span data-lang="cn">2029+</span></strong></td>
+              <td><span data-lang="en">Global expansion, category leadership entrenched</span><span data-lang="cn">全球扩张，确立行业地位</span></td>
+              <td><span data-lang="en">Grid catches up — the arbitrage closes</span><span data-lang="cn">电网赶上——套利窗口关闭</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 6. SPEED = MOAT ═══ -->
+  <section class="slide" data-title-en="Speed Advantage" data-title-cn="速度优势">
+    <div class="slide-inner">
+      <div class="eyebrow"><span data-lang="en">05 · Speed Advantage</span><span data-lang="cn">05 · 速度优势</span></div>
+      <h1 class="title">
+        <span data-lang="en">We are 6–8× faster than the industry.</span>
+        <span data-lang="cn">我们比行业快6–8倍。</span>
+      </h1>
+      <p class="lead">
+        <span data-lang="en">Deploy speed is the single most important metric in the AI power race. It determines who wins the contract, who gets the offtaker, and whose capital compounds.</span>
+        <span data-lang="cn">在AI电力竞赛中，部署速度是最关键的指标——决定谁拿到合同、谁绑定买方、谁的资本能复利增长。</span>
+      </p>
+
+      <div class="bar-chart">
+        <div class="bar-row">
+          <div class="bar-label"><span data-lang="en">Project Blitzkrieg</span><span data-lang="cn">闪电战项目</span></div>
+          <div class="bar-track"><div class="bar-fill ours" style="width:12%">111d</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label"><span data-lang="en">Fast competitor</span><span data-lang="cn">快速对手</span></div>
+          <div class="bar-track"><div class="bar-fill them" style="width:55%">~540d</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label"><span data-lang="en">Industry avg</span><span data-lang="cn">行业平均</span></div>
+          <div class="bar-track"><div class="bar-fill them" style="width:80%">~720d</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label"><span data-lang="en">Grid interconnect</span><span data-lang="cn">电网接入</span></div>
+          <div class="bar-track"><div class="bar-fill them" style="width:100%">1,460d+</div></div>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top:26px;">
+        <div class="kpi"><div class="v">6–8×</div><div class="l"><span data-lang="en">Faster Deploy</span><span data-lang="cn">交付速度</span></div><div class="d"><span data-lang="en">vs. industry average</span><span data-lang="cn">对比行业均值</span></div></div>
+        <div class="kpi"><div class="v">2.4 yrs</div><div class="l"><span data-lang="en">Revenue Pull-forward</span><span data-lang="cn">营收前移</span></div><div class="d"><span data-lang="en">Per site, on average</span><span data-lang="cn">单站均值</span></div></div>
+        <div class="kpi"><div class="v">99.999%</div><div class="l"><span data-lang="en">Design Uptime</span><span data-lang="cn">设计可用性</span></div><div class="d"><span data-lang="en">N+3 redundancy</span><span data-lang="cn">N+3冗余架构</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 7. BUSINESS MODEL ═══ -->
+  <section class="slide" data-title-en="Business Model" data-title-cn="商业模式">
+    <div class="slide-inner">
+      <div class="eyebrow"><span data-lang="en">06 · Business Model</span><span data-lang="cn">06 · 商业模式</span></div>
+      <h1 class="title">
+        <span data-lang="en">Two revenue engines. One playbook.</span>
+        <span data-lang="cn">双引擎营收，一套打法。</span>
+      </h1>
+      <p class="lead" style="margin-bottom:14px;">
+        <span data-lang="en">Each site is a standardized, financeable asset monetized in either mode, chosen per counterparty and capital cycle.</span>
+        <span data-lang="cn">每个场站都是标准化、可融资的资产——根据对手方与资本周期，可选择两种变现模式。</span>
+      </p>
+
+      <div class="grid-2" style="margin-bottom:14px;">
+        <div class="card" style="border-top:3px solid var(--gold);"><span class="bar"></span>
+          <div class="ic-box" style="background:linear-gradient(135deg,rgba(168,153,96,.18),rgba(201,183,130,.12));">A</div>
+          <h4><span data-lang="en">Model A · Long-Term PPA (Own &amp; Operate)</span><span data-lang="cn">模式A · 长期PPA（自持运营）</span></h4>
+          <p><span data-lang="en">Build, own, and operate the asset. 20–25 year inflation-indexed PPA with investment-grade offtaker. Annuity-style cash flow; each site refinanceable on its own contract. Drives long-term enterprise value.</span><span data-lang="cn">建设、自持、运营。与投资级买方签20–25年通胀挂钩PPA。年金式现金流；每站凭合同单独再融资。驱动长期企业价值。</span></p>
+        </div>
+        <div class="card" style="border-top:3px solid var(--gold);"><span class="bar"></span>
+          <div class="ic-box" style="background:linear-gradient(135deg,rgba(168,153,96,.18),rgba(201,183,130,.12));">B</div>
+          <h4><span data-lang="en">Model B · Build-and-Sell Turnkey</span><span data-lang="cn">模式B · 建成交钥匙转售</span></h4>
+          <p><span data-lang="en">Build to full commissioning, then sell the completed site as a turnkey asset to hyperscalers, infra funds, or sovereign buyers. Cash realized in months, capital redeployed immediately. Drives high capital velocity.</span><span data-lang="cn">建至全部调试完成，以交钥匙资产一次性转售给云厂商、基建基金或主权买方。数月内变现，资本立即再投入。驱动资本高周转。</span></p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card"><span class="bar"></span>
+          <div class="ic-box">$$</div>
+          <h4><span data-lang="en">Revenue Streams</span><span data-lang="cn">收入来源</span></h4>
+          <p><span data-lang="en">PPA energy sales · capacity payments · ancillary grid services · tax-credit monetization · operations fees · turnkey asset sale proceeds</span><span data-lang="cn">PPA电量销售 · 容量费 · 辅助电网服务 · 税收抵免货币化 · 运维费 · 交钥匙资产转售</span></p>
+        </div>
+        <div class="card"><span class="bar"></span>
+          <div class="ic-box">CF</div>
+          <h4><span data-lang="en">Per-Site Economics</span><span data-lang="cn">单站经济性</span></h4>
+          <p><span data-lang="en">Approx. <strong>$2.9–3.3B</strong> lifetime revenue · <strong>~34% net margin</strong> · payback under 6 years. Exact unit-economics shared under NDA.</span><span data-lang="cn">全生命周期收入约 <strong>$2.9–3.3B</strong> · 净利率 <strong>~34%</strong> · 回本周期＜6年。完整单位经济需签NDA后披露。</span></p>
+        </div>
+        <div class="card"><span class="bar"></span>
+          <div class="ic-box">▲</div>
+          <h4><span data-lang="en">Compounding Effect</span><span data-lang="cn">复利效应</span></h4>
+          <p><span data-lang="en">Each Strike Team deploys ~3 sites/year. Each site refinances and seeds the next. Capital velocity is the multiplier.</span><span data-lang="cn">每支突击队年部署约3站，每站再融资为下一站输血。资本周转即是乘数。</span></p>
+        </div>
+      </div>
+
+      <div class="fin-wrap">
+        <table class="fin-table">
+          <thead>
+            <tr>
+              <th><span data-lang="en">Metric</span><span data-lang="cn">指标</span></th>
+              <th><span data-lang="en">Range (investor-safe)</span><span data-lang="cn">区间（投资者版）</span></th>
+              <th><span data-lang="en">Notes</span><span data-lang="cn">说明</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong><span data-lang="en">Site CapEx</span><span data-lang="cn">单站资本开支</span></strong></td><td class="strong">$300–350M</td><td><span data-lang="en">Utility-scale solar + BESS flagship class</span><span data-lang="cn">公用事业级光储旗舰级</span></td></tr>
+            <tr><td><strong><span data-lang="en">Year-1 Site Revenue</span><span data-lang="cn">首年单站收入</span></strong></td><td class="strong">$50–60M</td><td><span data-lang="en">Ramp to steady-state in Year 2</span><span data-lang="cn">第2年达稳态</span></td></tr>
+            <tr><td><strong><span data-lang="en">25-Yr Site Revenue</span><span data-lang="cn">25年单站收入</span></strong></td><td class="strong">$2.9–3.3B</td><td><span data-lang="en">Inflation-indexed PPA</span><span data-lang="cn">通胀挂钩PPA</span></td></tr>
+            <tr><td><strong><span data-lang="en">Net Margin</span><span data-lang="cn">净利率</span></strong></td><td class="strong">~34%</td><td><span data-lang="en">Steady-state, post-debt service</span><span data-lang="cn">稳态，扣债务偿付后</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 8. TRACTION & MILESTONES ═══ -->
+  <section class="slide" data-title-en="Traction" data-title-cn="里程碑">
+    <div class="slide-inner">
+      <div class="eyebrow"><span data-lang="en">07 · Traction &amp; Roadmap</span><span data-lang="cn">07 · 进展与路线图</span></div>
+      <h1 class="title">
+        <span data-lang="en">Already in motion. Compounding from here.</span>
+        <span data-lang="cn">已在推进，正在复利增长。</span>
+      </h1>
+      <p class="lead">
+        <span data-lang="en">Corporate structure complete. First anchor site <strong>signed and contracted</strong>. TSXV listing <strong>to commence post M&amp;A</strong>. Next: supply chain M&amp;A and first 100 MW strike.</span>
+        <span data-lang="cn">公司架构已完成。首个锚定场站<strong>合同已签</strong>。TSXV上市<strong>将在并购完成后启动</strong>。下一步：供应链并购与首个100MW突击。</span>
+      </p>
+
+      <div class="timeline">
+        <div class="timeline-line"></div>
+        <div class="timeline-fill" id="timelineFill" style="width:12%"></div>
+        <div class="timeline-row">
+          <div class="tl-node done"><div class="tl-phase">Phase 0</div><div class="tl-dot"></div><div class="tl-label"><span data-lang="en">Entity Setup</span><span data-lang="cn">公司设立</span></div><div class="tl-target"><span data-lang="en">Month 1–2 · Complete</span><span data-lang="cn">第1–2月 · 完成</span></div></div>
+          <div class="tl-node planned"><div class="tl-phase">Phase 1</div><div class="tl-dot"></div><div class="tl-label"><span data-lang="en">TSXV Listing</span><span data-lang="cn">TSXV上市</span></div><div class="tl-target"><span data-lang="en">Month 4–16 · Planned</span><span data-lang="cn">第4–16月 · 计划中</span></div></div>
+          <div class="tl-node active"><div class="tl-phase">Phase 2</div><div class="tl-dot"></div><div class="tl-label"><span data-lang="en">Land Sprint</span><span data-lang="cn">拿地冲刺</span></div><div class="tl-target"><span data-lang="en">Month 2–8 · Underway</span><span data-lang="cn">第2–8月 · 进行中</span></div></div>
+          <div class="tl-node planned"><div class="tl-phase">Phase 3</div><div class="tl-dot"></div><div class="tl-label"><span data-lang="en">Supply M&amp;A</span><span data-lang="cn">供应链并购</span></div><div class="tl-target"><span data-lang="en">Month 3–9</span><span data-lang="cn">第3–9月</span></div></div>
+          <div class="tl-node planned"><div class="tl-phase">Phase 4</div><div class="tl-dot"></div><div class="tl-label"><span data-lang="en">First 100 MW</span><span data-lang="cn">首个100MW</span></div><div class="tl-target"><span data-lang="en">Month 6–8</span><span data-lang="cn">第6–8月</span></div></div>
+          <div class="tl-node planned"><div class="tl-phase">Phase 5</div><div class="tl-dot"></div><div class="tl-label"><span data-lang="en">10 Teams</span><span data-lang="cn">10支队伍</span></div><div class="tl-target"><span data-lang="en">Month 9–18</span><span data-lang="cn">第9–18月</span></div></div>
+          <div class="tl-node planned"><div class="tl-phase">Phase 6</div><div class="tl-dot"></div><div class="tl-label"><span data-lang="en">Nasdaq IPO</span><span data-lang="cn">纳斯达克IPO</span></div><div class="tl-target"><span data-lang="en">Month 18–24</span><span data-lang="cn">第18–24月</span></div></div>
+          <div class="tl-node planned"><div class="tl-phase">Phase 7</div><div class="tl-dot"></div><div class="tl-label"><span data-lang="en">Global</span><span data-lang="cn">全球扩张</span></div><div class="tl-target"><span data-lang="en">Year 3+</span><span data-lang="cn">第3年+</span></div></div>
+        </div>
+      </div>
+
+      <ul class="check-list" style="margin-top:22px;">
+        <li><span data-lang="en"><strong>Anchor site signed:</strong> 300-acre utility-scale solar + BESS (YF-contracted)</span><span data-lang="cn"><strong>锚定场站已签：</strong>300英亩公用事业级光储（YF合同）</span></li>
+        <li><span data-lang="en"><strong>Second site:</strong> 100-home prefab community pilot (ASTM-grade)</span><span data-lang="cn"><strong>第二场站：</strong>100户预制社区试点（ASTM标准）</span></li>
+        <li><span data-lang="en"><strong>IP moat:</strong> <span class="redacted">[5 patents]</span> covering deployment + balance-of-plant</span><span data-lang="cn"><strong>专利护城河：</strong><span class="redacted">[5项专利]</span>覆盖部署与辅助系统</span></li>
+        <li><span data-lang="en"><strong>Capital path:</strong> TSXV → Nasdaq, dual-track equity strategy</span><span data-lang="cn"><strong>资本路径：</strong>TSXV → 纳斯达克，双轨股权策略</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══ 9. FINANCIAL PROJECTIONS ═══ -->
+  <section class="slide" data-title-en="Financials" data-title-cn="财务">
+    <div class="slide-inner">
+      <div class="eyebrow"><span data-lang="en">08 · Financial Projections</span><span data-lang="cn">08 · 财务预测</span></div>
+      <h1 class="title">
+        <span data-lang="en">$30B+ cumulative revenue in 3 years (ranges).</span>
+        <span data-lang="cn">3年累计收入 $30B+（区间值）。</span>
+      </h1>
+      <p class="lead" style="margin-bottom:10px;">
+        <span data-lang="en">Projections are shown as investor-safe ranges. Exact unit economics, counterparty names, and site-level IRRs are disclosed under NDA only.</span>
+        <span data-lang="cn">以下预测为投资者区间口径。单位经济、对手方名称与项目级IRR仅在签署NDA后披露。</span>
+      </p>
+
+      <div class="fin-wrap">
+        <table class="fin-table">
+          <thead>
+            <tr>
+              <th><span data-lang="en">Year</span><span data-lang="cn">年度</span></th>
+              <th><span data-lang="en">Strike Teams</span><span data-lang="cn">突击队</span></th>
+              <th><span data-lang="en">Sites Operating</span><span data-lang="cn">运营场站</span></th>
+              <th><span data-lang="en">Capacity (MW)</span><span data-lang="cn">装机(MW)</span></th>
+              <th><span data-lang="en">Revenue</span><span data-lang="cn">营收</span></th>
+              <th><span data-lang="en">Net Profit</span><span data-lang="cn">净利</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Year 1</strong></td><td>2</td><td>~12</td><td>~1,200</td>
+              <td class="strong">~$3.6B</td><td class="strong">~$1.2B</td>
+            </tr>
+            <tr>
+              <td><strong>Year 2</strong></td><td>5</td><td>~30</td><td>~3,000</td>
+              <td class="strong">~$9.0B</td><td class="strong">~$3.1B</td>
+            </tr>
+            <tr>
+              <td><strong>Year 3</strong></td><td>10</td><td>~60</td><td>~6,000</td>
+              <td class="strong">~$18.0B</td><td class="strong">~$6.2B</td>
+            </tr>
+            <tr style="background:#faf5e6;">
+              <td><strong><span data-lang="en">3-Yr Cumulative</span><span data-lang="cn">3年累计</span></strong></td>
+              <td colspan="2"><span data-lang="en">Pipeline ramping to 10.2 GW</span><span data-lang="cn">项目管线扩至10.2GW</span></td>
+              <td>~10,200</td>
+              <td class="strong">~$30.6B</td><td class="strong">~$10.5B</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-3" style="margin-top:22px;">
+        <div class="kpi"><div class="v">$300B</div><div class="l"><span data-lang="en">Nasdaq Target Cap</span><span data-lang="cn">纳斯达克目标市值</span></div><div class="d"><span data-lang="en">24-month horizon</span><span data-lang="cn">24个月内目标</span></div></div>
+        <div class="kpi"><div class="v">$1T+</div><div class="l"><span data-lang="en">Year-5 Aspiration</span><span data-lang="cn">5年愿景</span></div><div class="d"><span data-lang="en">Category-leader outcome</span><span data-lang="cn">行业龙头情景</span></div></div>
+        <div class="kpi"><div class="v">~34%</div><div class="l"><span data-lang="en">Steady-State Margin</span><span data-lang="cn">稳态净利率</span></div><div class="d"><span data-lang="en">Post-debt service</span><span data-lang="cn">扣债务偿付后</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 10. MOATS ═══ -->
+  <section class="slide" data-title-en="Moats" data-title-cn="护城河">
+    <div class="slide-inner">
+      <div class="eyebrow"><span data-lang="en">09 · Competitive Moats</span><span data-lang="cn">09 · 竞争护城河</span></div>
+      <h1 class="title">
+        <span data-lang="en">Five moats, each hard to copy alone. Together, uncopyable.</span>
+        <span data-lang="cn">五重护城河，单一难复制，叠加不可复制。</span>
+      </h1>
+
+      <div class="moat-grid">
+        <div class="moat">
+          <div class="mi">CAP</div>
+          <h5><span data-lang="en">Capital Barrier</span><span data-lang="cn">资本壁垒</span></h5>
+          <p><span data-lang="en">Multi-billion $ shipping &amp; manufacturing commitment per site.</span><span data-lang="cn">单站数十亿美元的航运与制造预订。</span></p>
+        </div>
+        <div class="moat">
+          <div class="mi">MAP</div>
+          <h5><span data-lang="en">Land Moat</span><span data-lang="cn">土地护城河</span></h5>
+          <p><span data-lang="en">Pre-secured fiber-adjacent parcels across 4 US regions.</span><span data-lang="cn">四大美国区域近光纤地块已预锁。</span></p>
+        </div>
+        <div class="moat">
+          <div class="mi">SPD</div>
+          <h5><span data-lang="en">Speed</span><span data-lang="cn">速度</span></h5>
+          <p><span data-lang="en">Patented robotic deploy: 111d vs industry 18–24 months.</span><span data-lang="cn">专利机器人部署：111天 vs 行业18–24个月。</span></p>
+        </div>
+        <div class="moat">
+          <div class="mi">CLI</div>
+          <h5><span data-lang="en">Client Lock-in</span><span data-lang="cn">客户锁定</span></h5>
+          <p><span data-lang="en">Multi-site hyperscaler contracts with astronomical switching costs.</span><span data-lang="cn">多站云厂商合同，切换成本极高。</span></p>
+        </div>
+        <div class="moat">
+          <div class="mi">SUP</div>
+          <h5><span data-lang="en">Supply Chain</span><span data-lang="cn">供应链</span></h5>
+          <p><span data-lang="en">Vertically integrated — cannot be replicated overnight.</span><span data-lang="cn">垂直一体化，短期无法复制。</span></p>
+        </div>
+      </div>
+
+      <h3 style="margin-top:28px;"><span data-lang="en">Why they compound</span><span data-lang="cn">为何会叠加放大</span></h3>
+      <p class="lead">
+        <span data-lang="en">Every site built makes the next one cheaper (capital), faster (operational), more inevitable (client trust), and more defensible (land scarcity). First-mover compounds, not first-mover simple.</span>
+        <span data-lang="cn">每新增一站，下一站更便宜（资本）、更快（运营）、更稳（客户信任）、更有防御力（土地稀缺）。不是简单的先发优势，而是先发复利。</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══ 11. TEAM / PARTNERSHIPS ═══ -->
+  <section class="slide" data-title-en="Team" data-title-cn="团队">
+    <div class="slide-inner">
+      <div class="eyebrow"><span data-lang="en">10 · Team &amp; Partners</span><span data-lang="cn">10 · 团队与伙伴</span></div>
+      <h1 class="title">
+        <span data-lang="en">A builder&rsquo;s team, not a consultant&rsquo;s deck.</span>
+        <span data-lang="cn">一支建设者团队，而非咨询PPT。</span>
+      </h1>
+      <p class="lead" style="margin-bottom:16px;">
+        <span data-lang="en">Bilingual leadership bridging North American capital markets and Asian manufacturing/logistics execution. Senior bios disclosed on a named basis under NDA.</span>
+        <span data-lang="cn">中英双语领导层，打通北美资本市场与亚洲制造/物流执行。高管简历签NDA后具名披露。</span>
+      </p>
+
+      <div class="grid-3">
+        <div class="card"><span class="bar"></span>
+          <div class="ic-box">CEO</div>
+          <h4><span data-lang="en">Execution Leadership</span><span data-lang="cn">执行团队</span></h4>
+          <p><span data-lang="en">Cross-border operators with hands-on infrastructure, manufacturing, and capital-markets track records. Full bios on qualified request.</span><span data-lang="cn">具备跨境基建、制造与资本市场实战履历的运营者。合格询问提供完整简历。</span></p>
+        </div>
+        <div class="card"><span class="bar"></span>
+          <div class="ic-box">PAR</div>
+          <h4><span data-lang="en">Strategic Partners</span><span data-lang="cn">战略合作伙伴</span></h4>
+          <p><span data-lang="en">Contracted land partner on flagship site; M&amp;A-secured manufacturing partners; Tier-1 EPC relationships — names under NDA.</span><span data-lang="cn">旗舰场站签约土地伙伴；并购绑定的制造伙伴；一级EPC合作关系——具名需NDA。</span></p>
+        </div>
+        <div class="card"><span class="bar"></span>
+          <div class="ic-box">ADV</div>
+          <h4><span data-lang="en">Board &amp; Advisors</span><span data-lang="cn">董事与顾问</span></h4>
+          <p><span data-lang="en">Energy, infra, and capital-markets veterans. Composition being finalized ahead of TSXV listing.</span><span data-lang="cn">能源、基建、资本市场资深人士。TSXV上市前完成组阁。</span></p>
+        </div>
+      </div>
+
+      <h3 style="margin-top:28px;"><span data-lang="en">What we&rsquo;ve already signed</span><span data-lang="cn">我们已签下的</span></h3>
+      <ul class="check-list">
+        <li><span data-lang="en"><strong>MOU + binding bilingual contract</strong> on flagship 300-acre solar+BESS site</span><span data-lang="cn"><strong>已签旗舰300英亩光储场站</strong> MOU与中英双语约束性合同</span></li>
+        <li><span data-lang="en"><strong>Entity stack</strong> across US, HK, TW for Nasdaq path and IP custody</span><span data-lang="cn"><strong>美、港、台三地实体架构</strong>服务纳斯达克路径与知识产权托管</span></li>
+        <li><span data-lang="en"><strong>TSXV listing workstream</strong> Month 4–16 (~12-month process post M&amp;A)</span><span data-lang="cn"><strong>TSXV上市工作流</strong>第4–16月（并购后约12个月流程）</span></li>
+        <li><span data-lang="en"><strong>Prefab community pilot</strong> — second parcel, ASTM Canada spec</span><span data-lang="cn"><strong>预制社区试点</strong>——第二地块，加拿大ASTM标准</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══ 12. THE ASK / USE OF FUNDS ═══ -->
+  <section class="slide" data-title-en="The Ask" data-title-cn="融资方案">
+    <div class="slide-inner">
+      <div class="eyebrow"><span data-lang="en">11 · The Ask</span><span data-lang="cn">11 · 融资方案</span></div>
+      <h1 class="title">
+        <span data-lang="en">Capital to buy time — the scarcest input in this race.</span>
+        <span data-lang="cn">以资本购买时间——这场竞赛中最稀缺的要素。</span>
+      </h1>
+      <p class="lead" style="margin-bottom:10px;">
+        <span data-lang="en">Target size, instrument mix, and valuation are disclosed in the Investor Data Room. This deck establishes fit; detailed terms follow under NDA.</span>
+        <span data-lang="cn">募集规模、工具组合与估值在投资者资料室（Investor Data Room）披露。本册建立契合度，详细条款签NDA后提供。</span>
+      </p>
+
+      <h3 style="margin-top:14px;"><span data-lang="en">Use of Proceeds</span><span data-lang="cn">资金用途</span></h3>
+      <div class="use-funds">
+        <div class="uf">
+          <div class="pct">40%</div>
+          <div class="t"><span data-lang="en">Land Options</span><span data-lang="cn">土地期权</span></div>
+          <div class="d"><span data-lang="en">Lock fiber-adjacent parcels before competitors</span><span data-lang="cn">抢先锁定近光纤地块</span></div>
+        </div>
+        <div class="uf">
+          <div class="pct">25%</div>
+          <div class="t"><span data-lang="en">Supply M&amp;A</span><span data-lang="cn">供应链并购</span></div>
+          <div class="d"><span data-lang="en">Secure upstream panel &amp; BESS manufacturing</span><span data-lang="cn">绑定上游组件与储能制造</span></div>
+        </div>
+        <div class="uf">
+          <div class="pct">20%</div>
+          <div class="t"><span data-lang="en">Strike Teams</span><span data-lang="cn">突击队扩编</span></div>
+          <div class="d"><span data-lang="en">Scale from 2 to 10 deployment teams</span><span data-lang="cn">从2支扩至10支部署队伍</span></div>
+        </div>
+        <div class="uf">
+          <div class="pct">15%</div>
+          <div class="t"><span data-lang="en">Listing + Working Capital</span><span data-lang="cn">上市与营运资金</span></div>
+          <div class="d"><span data-lang="en">TSXV → Nasdaq path, compliance, reserves</span><span data-lang="cn">TSXV→纳斯达克通道、合规、储备金</span></div>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top:26px;">
+        <div class="kpi"><div class="v">24 mo</div><div class="l"><span data-lang="en">Runway to Nasdaq</span><span data-lang="cn">距纳斯达克</span></div><div class="d"><span data-lang="en">Dual-track listing plan</span><span data-lang="cn">双轨上市计划</span></div></div>
+        <div class="kpi"><div class="v">10×+</div><div class="l"><span data-lang="en">Early-Stage Upside</span><span data-lang="cn">早期上行空间</span></div><div class="d"><span data-lang="en">Base-case to Nasdaq target</span><span data-lang="cn">基准情景至纳斯达克目标</span></div></div>
+        <div class="kpi"><div class="v">PPA-backed</div><div class="l"><span data-lang="en">Downside Floor</span><span data-lang="cn">下行底线</span></div><div class="d"><span data-lang="en">Hard-asset, contracted cash flow</span><span data-lang="cn">硬资产、合同现金流</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 13. CLOSE / CONTACT ═══ -->
+  <section class="slide" data-title-en="Close" data-title-cn="结束">
+    <div class="cover">
+      <div class="cover-inner">
+        <div class="eyebrow"><span data-lang="en">Thank you</span><span data-lang="cn">感谢</span></div>
+        <h1 class="hero-title">
+          <span data-lang="en">Let&rsquo;s power the AI era — together.</span>
+          <span data-lang="cn">让我们一起为AI时代供能。</span>
+        </h1>
+        <h2 class="sub" style="color:#d8d0b8;max-width:760px;margin-left:auto;margin-right:auto;">
+          <span data-lang="en">Next step: Investor Data Room access under NDA, followed by a technical deep-dive with the deployment team.</span>
+          <span data-lang="cn">下一步：签NDA后开通投资者资料室（Investor Data Room）访问，随后与部署团队技术深度沟通。</span>
+        </h2>
+
+        <div class="cover-stats" style="grid-template-columns:repeat(3,1fr);max-width:720px;margin:38px auto 0;">
+          <div class="cover-stat">
+            <div class="v" style="font-size:18px;"><span data-lang="en">NDA + Data Room</span><span data-lang="cn">NDA+数据室</span></div>
+            <div class="l"><span data-lang="en">Step 1</span><span data-lang="cn">步骤1</span></div>
+          </div>
+          <div class="cover-stat">
+            <div class="v" style="font-size:18px;"><span data-lang="en">Site Visit</span><span data-lang="cn">实地考察</span></div>
+            <div class="l"><span data-lang="en">Step 2</span><span data-lang="cn">步骤2</span></div>
+          </div>
+          <div class="cover-stat">
+            <div class="v" style="font-size:18px;"><span data-lang="en">Term Sheet</span><span data-lang="cn">投资意向书</span></div>
+            <div class="l"><span data-lang="en">Step 3</span><span data-lang="cn">步骤3</span></div>
+          </div>
+        </div>
+
+        <div style="margin-top:28px;margin-bottom:16px;padding:18px 26px;background:rgba(255,255,255,.04);border:1px solid rgba(168,153,96,.25);border-radius:12px;display:inline-block;text-align:left;">
+          <div style="font-size:11px;color:#b8c0a8;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px;text-align:center;">
+            <span data-lang="en">Investor Contact</span><span data-lang="cn">投资者联络</span>
+          </div>
+          <div style="font-size:18px;color:#fff;font-weight:800;">Ron Tsui</div>
+          <div style="font-size:12px;color:#d8d0b8;margin-top:2px;">
+            <span data-lang="en">Project Blitzkrieg · Investor Relations</span>
+            <span data-lang="cn">闪电战项目 · 投资者关系</span>
+          </div>
+          <div style="font-size:14px;color:var(--gold-light);margin-top:10px;font-weight:600;">
+            <a href="mailto:ronaldhhenderson@gmail.com" style="color:var(--gold-light);text-decoration:none;">ronaldhhenderson@gmail.com</a>
+          </div>
+        </div>
+      </div>
+      <div class="confid">
+        <span data-lang="en">Confidential · © Project Blitzkrieg 2026</span>
+        <span data-lang="cn">机密 · © 闪电战项目 2026</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 14. PRINTABLE NDA (for client to print & sign) ═══ -->
+  <section class="slide" data-title-en="NDA — Print &amp; Sign" data-title-cn="保密协议 — 打印签署">
+    <div class="slide-inner">
+      <div class="eyebrow"><span data-lang="en">14 · Non-Disclosure Agreement</span><span data-lang="cn">14 · 保密协议</span></div>
+      <h1 class="title">
+        <span data-lang="en">For Your Signature</span>
+        <span data-lang="cn">请签署保密协议</span>
+      </h1>
+      <p class="lead" style="margin-bottom:18px;">
+        <span data-lang="en">Print, sign, and return a scanned copy to proceed to the Investor Data Room.</span>
+        <span data-lang="cn">请打印、签字并回传扫描件，以进入投资者资料室 (Investor Data Room)。</span>
+      </p>
+
+      <div class="nda-print" id="ndaPrintDoc">
+      <h2>
+        <span data-lang="en">Mutual Non-Disclosure Agreement</span>
+        <span data-lang="cn">双边保密协议</span>
+      </h2>
+      <div class="stamp">
+        <span data-lang="en">PROJECT BLITZKRIEG · CONFIDENTIAL · 2026</span>
+        <span data-lang="cn">闪电战项目 · 机密 · 2026</span>
+      </div>
+
+      <div data-lang="en" class="block">
+        <div class="clause"><span class="cnum">1.</span><strong>Parties.</strong> Between <strong>Project Blitzkrieg</strong> (represented by Ron Tsui — "Discloser") and the signer below ("Recipient"). Effective on signing.</div>
+        <div class="clause"><span class="cnum">2.</span><strong>Confidential Info.</strong> All non-public info shared here: the deck, financials, site &amp; partner names, suppliers, IP, and deal terms — in any form.</div>
+        <div class="clause"><span class="cnum">3.</span><strong>Permitted Use.</strong> Recipient may use the info only to evaluate an investment or partnership with Discloser. No other use. No rights or licenses granted.</div>
+        <div class="clause"><span class="cnum">4.</span><strong>Non-Disclosure.</strong> Recipient will keep the info secret, protect it as their own top-secret info, and will not copy, forward, screenshot, post, or share it without Discloser's written consent.</div>
+        <div class="clause"><span class="cnum">5.</span><strong>Exclusions.</strong> Does not apply to info that is (a) already public, (b) already known without a duty of confidence, (c) independently developed, or (d) legally required to disclose (give notice if allowed).</div>
+        <div class="clause"><span class="cnum">6.</span><strong>Term.</strong> Binds on signing. Confidentiality lasts <strong>three (3) years</strong> — indefinitely for trade secrets.</div>
+        <div class="clause"><span class="cnum">7.</span><strong>Return.</strong> On request, Recipient promptly returns or destroys all info (and copies) and confirms in writing.</div>
+        <div class="clause"><span class="cnum">8.</span><strong>No Warranty.</strong> Info provided "as is". Not an offer to sell securities. Neither party is bound to any deal.</div>
+        <div class="clause"><span class="cnum">9.</span><strong>Remedies.</strong> Unauthorized disclosure causes irreparable harm. Discloser may seek injunctions plus any other legal remedy.</div>
+        <div class="clause"><span class="cnum">10.</span><strong>Governing Law.</strong> British Columbia, Canada. Exclusive jurisdiction: Vancouver courts.</div>
+      </div>
+
+      <div data-lang="cn" class="block">
+        <div class="clause"><span class="cnum">1.</span><strong>签约方。</strong>披露方：<strong>闪电战项目</strong>（由 Ron Tsui 代表）；接收方：下方签字人。自签字之日起生效。</div>
+        <div class="clause"><span class="cnum">2.</span><strong>保密信息。</strong>本次披露的一切非公开信息，包括演示文稿、财务数据、场地与合作方身份、供应商、知识产权、交易条款等——不论形式。</div>
+        <div class="clause"><span class="cnum">3.</span><strong>使用限制。</strong>仅用于评估与披露方的投资或合作，不得作他用。不授予任何许可或权利。</div>
+        <div class="clause"><span class="cnum">4.</span><strong>保密义务。</strong>接收方须严格保密，按其自身最高机密标准保护；未经书面同意不得复制、转发、截屏、发布或分享。</div>
+        <div class="clause"><span class="cnum">5.</span><strong>除外情形。</strong>不适用于：(a) 已公开；(b) 披露前已合法知悉；(c) 独立开发；(d) 法律强制披露（应尽可能提前通知）。</div>
+        <div class="clause"><span class="cnum">6.</span><strong>有效期。</strong>签字生效，保密期限<strong>三 (3) 年</strong>；商业秘密则无限期。</div>
+        <div class="clause"><span class="cnum">7.</span><strong>归还。</strong>经要求，接收方应迅速归还或销毁全部信息（含副本）并书面确认。</div>
+        <div class="clause"><span class="cnum">8.</span><strong>无保证。</strong>信息按"现状"提供，不构成证券销售要约，不约束任一方达成交易。</div>
+        <div class="clause"><span class="cnum">9.</span><strong>救济。</strong>未经授权披露将造成难以弥补的损害，披露方可申请禁令及其他法律救济。</div>
+        <div class="clause"><span class="cnum">10.</span><strong>管辖法律。</strong>适用加拿大不列颠哥伦比亚省法律，由温哥华法院专属管辖。</div>
+      </div>
+
+      <div class="nda-sig-grid">
+        <div class="nda-sig-block">
+          <h4><span data-lang="en">Disclosing Party</span><span data-lang="cn">披露方</span></h4>
+          <div class="nda-sig-line"><span class="label"><span data-lang="en">Name:</span><span data-lang="cn">姓名：</span></span><span class="underline">Ron Tsui</span></div>
+          <div class="nda-sig-line"><span class="label"><span data-lang="en">Title:</span><span data-lang="cn">职务：</span></span><span class="underline"><span data-lang="en">Principal, Project Blitzkrieg</span><span data-lang="cn">主理人，闪电战项目</span></span></div>
+          <div class="nda-sig-line"><span class="label"><span data-lang="en">Email:</span><span data-lang="cn">邮箱：</span></span><span class="underline">ronaldhhenderson@gmail.com</span></div>
+          <div class="nda-sig-line"><span class="label"><span data-lang="en">Signature:</span><span data-lang="cn">签字：</span></span><span class="underline"></span></div>
+          <div class="nda-sig-line"><span class="label"><span data-lang="en">Date:</span><span data-lang="cn">日期：</span></span><span class="underline"></span></div>
+        </div>
+        <div class="nda-sig-block">
+          <h4><span data-lang="en">Receiving Party</span><span data-lang="cn">接收方</span></h4>
+          <div class="nda-sig-line"><span class="label"><span data-lang="en">Name:</span><span data-lang="cn">姓名：</span></span><span class="underline"></span></div>
+          <div class="nda-sig-line"><span class="label"><span data-lang="en">Title:</span><span data-lang="cn">职务：</span></span><span class="underline"></span></div>
+          <div class="nda-sig-line"><span class="label"><span data-lang="en">Company:</span><span data-lang="cn">公司：</span></span><span class="underline"></span></div>
+          <div class="nda-sig-line"><span class="label"><span data-lang="en">Signature:</span><span data-lang="cn">签字：</span></span><span class="underline"></span></div>
+          <div class="nda-sig-line"><span class="label"><span data-lang="en">Date:</span><span data-lang="cn">日期：</span></span><span class="underline"></span></div>
+        </div>
+      </div>
+    </div>
+
+      <div style="text-align:center;">
+        <button class="print-btn-inline" id="ndaPrintBtn" type="button" title="Print NDA on A4 paper · 以A4纸张打印">
+          <span class="ic">⎙</span>
+          <span data-lang="en">Print NDA on A4</span>
+          <span data-lang="cn">A4打印保密协议</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ═══ BOTTOM BAR ═══ -->
+<div class="bottombar">
+  <button class="nav-btn" id="prevBtn" type="button">
+    <span class="arr">‹</span>
+    <span data-lang="en">Prev</span>
+    <span data-lang="cn">上一页</span>
+  </button>
+  <div class="dots" id="dots"></div>
+  <button class="nav-btn" id="nextBtn" type="button">
+    <span data-lang="en">Next</span>
+    <span data-lang="cn">下一页</span>
+    <span class="arr">›</span>
+  </button>
+</div>
+
+<!-- ═══ HELP OVERLAY ═══ -->
+<div class="help-overlay" id="helpOverlay">
+  <div class="help-box">
+    <h3>
+      <span data-lang="en">Keyboard Shortcuts</span>
+      <span data-lang="cn">键盘快捷键</span>
+    </h3>
+    <div class="help-row">
+      <span><span data-lang="en">Next slide</span><span data-lang="cn">下一页</span></span>
+      <span class="k">→ / Space / PgDn</span>
+    </div>
+    <div class="help-row">
+      <span><span data-lang="en">Previous slide</span><span data-lang="cn">上一页</span></span>
+      <span class="k">← / PgUp</span>
+    </div>
+    <div class="help-row">
+      <span><span data-lang="en">First / Last</span><span data-lang="cn">首页 / 末页</span></span>
+      <span class="k">Home / End</span>
+    </div>
+    <div class="help-row">
+      <span><span data-lang="en">Toggle language</span><span data-lang="cn">切换语言</span></span>
+      <span class="k">L</span>
+    </div>
+    <div class="help-row">
+      <span><span data-lang="en">Fullscreen</span><span data-lang="cn">全屏</span></span>
+      <span class="k">F</span>
+    </div>
+    <div class="help-row">
+      <span><span data-lang="en">This dialog</span><span data-lang="cn">本对话框</span></span>
+      <span class="k">? / H</span>
+    </div>
+    <button class="help-close" id="helpClose" type="button">
+      <span data-lang="en">Got it</span>
+      <span data-lang="cn">知道了</span>
+    </button>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  // ═══ STATE ═══
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var current = 0;
+  var total = slides.length;
+
+  // ═══ DOM REFS ═══
+  var progFill = document.getElementById('progFill');
+  var curSpan = document.getElementById('curSlide');
+  var totSpan = document.getElementById('totSlide');
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var dotsBox = document.getElementById('dots');
+  var langBtn = document.getElementById('langBtn');
+  var fsBtn   = document.getElementById('fsBtn');
+  var printBtn = document.getElementById('printBtn');
+  var helpBtn = document.getElementById('helpBtn');
+  var homeBtn = document.getElementById('homeBtn');
+  var helpOverlay = document.getElementById('helpOverlay');
+  var helpClose = document.getElementById('helpClose');
+
+  totSpan.textContent = total;
+
+  // ═══ BUILD DOTS ═══
+  slides.forEach(function(s, i){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'dot' + (i===0?' on':'');
+    b.setAttribute('aria-label', 'Go to slide ' + (i+1));
+    b.title = (s.getAttribute('data-title-en') || ('Slide ' + (i+1)));
+    b.addEventListener('click', function(){ goTo(i); });
+    dotsBox.appendChild(b);
+  });
+  var dotNodes = Array.prototype.slice.call(dotsBox.querySelectorAll('.dot'));
+
+  // ═══ NAVIGATION ═══
+  function clearAnim(s){
+    s.classList.remove('leave-left','leave-right','enter-right','enter-left');
+  }
+  function goTo(idx){
+    if(idx < 0) idx = 0;
+    if(idx >= total) idx = total - 1;
+    if(idx === current) return;
+
+    var forward = idx > current;
+    var oldSlide = slides[current];
+    var newSlide = slides[idx];
+
+    slides.forEach(function(s){ clearAnim(s); });
+
+    oldSlide.classList.remove('active');
+    oldSlide.classList.add(forward ? 'leave-left' : 'leave-right');
+
+    newSlide.classList.add(forward ? 'enter-right' : 'enter-left');
+    void newSlide.offsetWidth;
+    clearAnim(newSlide);
+    newSlide.classList.add('active');
+
+    newSlide.scrollTop = 0;
+
+    dotNodes[current].classList.remove('on');
+    dotNodes[idx].classList.add('on');
+
+    current = idx;
+    curSpan.textContent = current + 1;
+    progFill.style.width = (((current + 1) / total) * 100).toFixed(2) + '%';
+
+    prevBtn.disabled = (current === 0);
+    nextBtn.disabled = (current === total - 1);
+  }
+  function next(){ goTo(current + 1); }
+  function prev(){ goTo(current - 1); }
+
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+
+  // ═══ KEYBOARD ═══
+  document.addEventListener('keydown', function(e){
+    if(helpOverlay.classList.contains('on')){
+      if(e.key === 'Escape' || e.key === '?' || e.key === 'h' || e.key === 'H'){
+        helpOverlay.classList.remove('on');
+        e.preventDefault();
+      }
+      return;
+    }
+    switch(e.key){
+      case 'ArrowRight':
+      case 'PageDown':
+      case ' ':
+        next(); e.preventDefault(); break;
+      case 'ArrowLeft':
+      case 'PageUp':
+        prev(); e.preventDefault(); break;
+      case 'Home': goTo(0); e.preventDefault(); break;
+      case 'End':  goTo(total - 1); e.preventDefault(); break;
+      case 'l': case 'L': toggleLang(); e.preventDefault(); break;
+      case 'f': case 'F': toggleFs(); e.preventDefault(); break;
+      case '?': case 'h': case 'H':
+        helpOverlay.classList.add('on'); e.preventDefault(); break;
+      case 'Escape':
+        if(typeof getFsEl === 'function' && getFsEl()){ exitFs(); }
+        break;
+    }
+  });
+
+  // ═══ LANGUAGE ═══
+  function toggleLang(){
+    document.body.classList.toggle('lang-cn');
+    dotNodes.forEach(function(b,i){
+      var s = slides[i];
+      var isCn = document.body.classList.contains('lang-cn');
+      b.title = (isCn ? s.getAttribute('data-title-cn') : s.getAttribute('data-title-en')) || ('Slide ' + (i+1));
+    });
+  }
+  langBtn.addEventListener('click', toggleLang);
+
+  // ═══ FULLSCREEN (iOS Safari compatible) ═══
+  function getFsEl(){
+    return document.fullscreenElement || document.webkitFullscreenElement ||
+           document.mozFullScreenElement || document.msFullscreenElement || null;
+  }
+  function requestFs(el){
+    var fn = el.requestFullscreen || el.webkitRequestFullscreen ||
+             el.webkitEnterFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+    if(fn){
+      try { var p = fn.call(el); if(p && p.catch) p.catch(function(){}); }
+      catch(err){}
+    }
+  }
+  function exitFs(){
+    var fn = document.exitFullscreen || document.webkitExitFullscreen ||
+             document.mozCancelFullScreen || document.msExitFullscreen;
+    if(fn){
+      try { var p = fn.call(document); if(p && p.catch) p.catch(function(){}); }
+      catch(err){}
+    }
+  }
+  function toggleFs(){
+    if(!getFsEl()){ requestFs(document.documentElement); }
+    else { exitFs(); }
+  }
+  if(typeof fsBtn !== 'undefined' && fsBtn){
+    fsBtn.addEventListener('click', toggleFs);
+  }
+
+  // ═══ HOME ═══
+  if(homeBtn){
+    homeBtn.addEventListener('click', function(){ goTo(0); });
+  }
+
+  // ═══ PRINT (NDA only — deck body is locked) ═══
+  function printNdaOnly(){
+    document.body.classList.add('print-nda-only');
+    setTimeout(function(){
+      window.print();
+      setTimeout(function(){ document.body.classList.remove('print-nda-only'); }, 300);
+    }, 40);
+  }
+  printBtn.addEventListener('click', printNdaOnly);
+  window.addEventListener('afterprint', function(){
+    document.body.classList.remove('print-nda-only');
+  });
+
+  // ═══ SCREENSHOT / COPY DETERRENTS ═══
+  document.addEventListener('contextmenu', function(e){
+    var t = e.target;
+    while(t && t !== document.body){
+      if(t.classList && (t.classList.contains('nda-print') || t.classList.contains('nda-gate'))) return;
+      t = t.parentNode;
+    }
+    e.preventDefault();
+  });
+  document.addEventListener('keydown', function(e){
+    var mod = e.ctrlKey || e.metaKey;
+    if(!mod) return;
+    var k = (e.key || '').toLowerCase();
+    if(k === 'p' || k === 's'){
+      e.preventDefault();
+      printNdaOnly();
+    }
+  }, true);
+  document.addEventListener('dragstart', function(e){
+    var tag = (e.target && e.target.tagName || '').toLowerCase();
+    if(tag === 'img' || tag === 'svg' || tag === 'canvas') e.preventDefault();
+  });
+
+  // ═══ HELP ═══
+  helpBtn.addEventListener('click', function(){ helpOverlay.classList.add('on'); });
+  helpClose.addEventListener('click', function(){ helpOverlay.classList.remove('on'); });
+  helpOverlay.addEventListener('click', function(e){
+    if(e.target === helpOverlay) helpOverlay.classList.remove('on');
+  });
+
+  // ═══ SWIPE (touch) ═══
+  var touchStartX = 0, touchStartY = 0;
+  var swipeBlocked = false;
+  function isScrollable(el){
+    while(el && el !== document.body){
+      if(el.nodeType === 1){
+        var cs = getComputedStyle(el);
+        var oy = cs.overflowY;
+        if((oy === 'auto' || oy === 'scroll') && el.scrollHeight > el.clientHeight + 2) return true;
+        if(el.classList && (el.classList.contains('nda-gate') || el.classList.contains('nda-body') || el.classList.contains('help-overlay') || el.classList.contains('nda-card'))) return true;
+      }
+      el = el.parentNode;
+    }
+    return false;
+  }
+  document.addEventListener('touchstart', function(e){
+    if(e.touches.length !== 1){ swipeBlocked = true; return; }
+    swipeBlocked = isScrollable(e.target);
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    if(swipeBlocked) return;
+    if(!e.changedTouches || e.changedTouches.length !== 1) return;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    var dy = e.changedTouches[0].clientY - touchStartY;
+    if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5){
+      if(dx < 0) next(); else prev();
+    }
+  }, {passive:true});
+
+  // ═══ NDA GATE ═══
+  var ndaGate = document.getElementById('ndaGate');
+  var ndaCheck = document.getElementById('ndaCheck');
+  var ndaAccept = document.getElementById('ndaAccept');
+  var ndaDecline = document.getElementById('ndaDecline');
+  var ndaLangBtn = document.getElementById('ndaLangBtn');
+  var ndaPrintBtn = document.getElementById('ndaPrintBtn');
+
+  if(ndaCheck && ndaAccept){
+    ndaCheck.addEventListener('change', function(){
+      ndaAccept.disabled = !ndaCheck.checked;
+    });
+    ndaAccept.addEventListener('click', function(){
+      if(!ndaCheck.checked) return;
+      ndaGate.classList.add('hidden');
+      try { nextBtn.focus(); } catch(_){}
+    });
+  }
+  if(ndaDecline){
+    ndaDecline.addEventListener('click', function(){
+      document.documentElement.innerHTML =
+        '<head><meta charset="UTF-8"><title>Access Declined</title>' +
+        '<style>body{font-family:system-ui,sans-serif;background:#1f2e22;color:#fff;' +
+        'display:flex;align-items:center;justify-content:center;height:100vh;margin:0;padding:24px;text-align:center;}' +
+        '.box{max-width:480px;}h1{font-size:22px;margin-bottom:12px;color:#c9b782;}' +
+        'p{color:#d8d0b8;line-height:1.6;font-size:14px;}</style></head>' +
+        '<body><div class="box"><h1>Access Declined / 已拒绝访问</h1>' +
+        '<p>You have declined the confidentiality terms. Please close this file and delete any copies.<br><br>' +
+        '您已拒绝保密条款。请关闭本文件并删除所有副本。</p></div></body>';
+    });
+  }
+  if(ndaLangBtn){
+    ndaLangBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      toggleLang();
+    });
+  }
+  if(ndaPrintBtn){
+    ndaPrintBtn.addEventListener('click', function(){
+      document.body.classList.add('print-nda-only');
+      setTimeout(function(){
+        window.print();
+        setTimeout(function(){
+          document.body.classList.remove('print-nda-only');
+        }, 200);
+      }, 50);
+    });
+    window.addEventListener('afterprint', function(){
+      document.body.classList.remove('print-nda-only');
+    });
+  }
+
+  // ═══ INIT ═══
+  prevBtn.disabled = true;
+  if(total <= 1) nextBtn.disabled = true;
+
+  setTimeout(function(){
+    var tf = document.getElementById('timelineFill');
+    if(tf) tf.style.transition = 'width 1.2s cubic-bezier(.4,0,.2,1)';
+  }, 100);
+
+})();
+</script>
+
+</body>
+</html>
